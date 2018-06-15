@@ -1,6 +1,12 @@
 package com.poly.midware.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
+import com.poly.midware.modle.CountNumberModel;
+import com.poly.midware.entity.StuffEntity;
+import com.poly.midware.utils.driver.SimpleInsertLangDriver;
+import com.poly.midware.utils.driver.SimpleUpdateLangDriver;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 /**
  * @ProjectName: midware
@@ -13,4 +19,44 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface StuffMapper {
 
+    @Insert("INSERT INTO stuff(#{stuffEntity})")
+    @Lang(SimpleInsertLangDriver.class)
+    int insert(StuffEntity stuffEntity);
+
+    @Select("SELECT * FROM stuff")
+    List<StuffEntity> select();
+
+    @Select("SELECT * FROM stuff WHERE userName = #{userName}")
+    List<StuffEntity> queryByUserName(String userName);
+
+    @Update("UPDATE stuff (#{stuff}) WHERE userName = #{userName}")
+    @Lang(SimpleUpdateLangDriver.class)
+    int updateByUserName(StuffEntity stuff);
+
+    @Delete("DELETE FROM stuff WHERE userName=#{userName}")
+    int deleteByUserName(String userName);
+
+    @Delete("DELETE FROM stuff WHERE id > 0 AND archived='4';")
+    int deleteAllStuff();
+
+    @Update("UPDATE stuff SET archived='4' WHERE id > 0;")
+    int archiveAllStuff();
+
+    @Select("SELECT count(uniqueId) as number FROM stuff where uniqueId = #{uniqueId};")
+    CountNumberModel check(String uniqueId);
+
+    @Update("UPDATE stuff SET archived='1' WHERE id > 0 AND uniqueId = #{uniqueId};")
+    void archiveStuff(String uniqueId);
+
+    @Update("UPDATE stuff (#{stuff}) WHERE uniqueId = #{uniqueId}")
+    @Lang(SimpleUpdateLangDriver.class)
+    void updateStuff(StuffEntity stuff);
+
+    @Insert("INSERT INTO stuff_view(#{stuffEntity})")
+    @Lang(SimpleInsertLangDriver.class)
+    void ssoStuffInsert(StuffEntity e);
+
+
+    @Select("SELECT * FROM stuff WHERE archived='0';")
+    List<StuffEntity> ssoStuffPushAll();
 }

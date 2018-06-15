@@ -2,6 +2,7 @@ package com.poly.midware.utils;
 
 /**
  * 统一的JSON异常返回对象
+ *
  * @ProjectName: midware
  * @Package: com.poly.midware.exception
  * @Author: longhai

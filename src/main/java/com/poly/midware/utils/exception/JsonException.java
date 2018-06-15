@@ -2,6 +2,7 @@ package com.poly.midware.utils.exception;
 
 /**
  * 自定义JSON异常类
+ *
  * @ProjectName: midware
  * @Package: com.poly.midware.utils.exception
  * @Author: longhai

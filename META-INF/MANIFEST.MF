@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: D:\longhai\Documents\midware\target\classes
+Main-Class: com.poly.midware.MidwareApplication
+

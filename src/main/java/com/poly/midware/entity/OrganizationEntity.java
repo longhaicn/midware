@@ -1,34 +1,54 @@
 package com.poly.midware.entity;
-
-import java.util.List;
+import lombok.Data;
+import java.util.Date;
 
 /**
  * 组织架构实体
  */
-public class OrganizationEntity {
-    /**数据库流水*/
-    private String ids;
-    /**组织机构的ID*/
+@Data
+public class OrganizationEntity implements java.io.Serializable {
+    /**
+     * 数据库流水
+     */
+//    private int id;
+    /**
+     * 数据唯一标识ID
+     */
+    private String uniqueId;
+    /**
+     * 机构类型：单位:UN  部门:UM   岗位:@K
+     */
+    private String organizationSetid;
+    /**
+     * 组织机构的ID
+     */
     private String organizationUuid;
-    /**组织机构名称*/
-    private  String organization;
-    /**所属父级组织机构的ID*/
-    String parentUuid;
-    /**OU的所有直属子级*/
-    private List<String> childrenOuUuid;
-    /**创建时间*/
-    private String createTime;
-    /**最后操作时间*/
-    private  String ts;
-    /**删除标记*/
-    private String archived;
-    /**是否已同步*/
-    private String handleFlag;
-    /**是否同步成功*/
-    private String success;
-    /**同步失败，原因*/
-    private String errorInfo;
-    /**推送次数记录*/
-    private  String pushNumber;
-
+    /**
+     * 组织机构名称
+     */
+    private String organization;
+    /**
+     * 所属父级组织机构的ID
+     */
+    private String parentUuid;
+    /**
+     * OU的所有直属子级
+     */
+    private String childrenOuUuid;
+    /**
+     * 和OA关联的Code
+     */
+    private String linkingCode;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 最后操作时间
+     */
+    private Date ts;
+    /**
+     * 删除标记
+     */
+    private int archived;
 }

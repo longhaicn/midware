@@ -4,6 +4,7 @@ import java.lang.annotation.*;
 
 /**
  * 系统日志注解
+ *
  * @ProjectName: midware
  * @Package: com.poly.midware.utils.annotation
  * @Author: longhai
@@ -16,5 +17,5 @@ import java.lang.annotation.*;
 @Documented
 public @interface SysLog {
 
-	String value() default "";
+    String value() default "";
 }

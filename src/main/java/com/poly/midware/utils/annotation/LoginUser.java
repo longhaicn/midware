@@ -7,6 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * 登录用户信息
+ *
  * @ProjectName: midware
  * @Package: com.poly.midware.utils.annotation
  * @Author: longhai

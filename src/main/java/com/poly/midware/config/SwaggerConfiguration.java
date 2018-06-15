@@ -12,6 +12,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * Swagger2配置类
+ *
  * @ProjectName: midware
  * @Package: com.poly.midware.config
  * @Author: longhai
@@ -38,7 +39,7 @@ public class SwaggerConfiguration {
                 .title("保臻科技主数据平台APIS")
                 .description("Spring boot 使用Swagger2构建RESTful APIS")
                 .termsOfServiceUrl("http://www.shenzhenpoly.com")
-                .contact("龙海")
+                .contact("Lenhart")
                 .version("1.0")
                 .build();
     }
