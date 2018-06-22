@@ -12,10 +12,6 @@ public class OrganizationEntity implements java.io.Serializable {
      */
 //    private int id;
     /**
-     * 数据唯一标识ID
-     */
-    private String uniqueId;
-    /**
      * 机构类型：单位:UN  部门:UM   岗位:@K
      */
     private String organizationSetid;
@@ -23,6 +19,10 @@ public class OrganizationEntity implements java.io.Serializable {
      * 组织机构的ID
      */
     private String organizationUuid;
+    /**
+     * 组织机构的Key
+     */
+    private String organizationKey;
     /**
      * 组织机构名称
      */
@@ -32,9 +32,17 @@ public class OrganizationEntity implements java.io.Serializable {
      */
     private String parentUuid;
     /**
+     * 所属父级组织机构的Key
+     */
+    private String parentKey;
+    /**
      * OU的所有直属子级
      */
     private String childrenOuUuid;
+    /**
+     * OU的所有直属子级Key
+     */
+    private String childrenKey;
     /**
      * 和OA关联的Code
      */
@@ -48,7 +56,7 @@ public class OrganizationEntity implements java.io.Serializable {
      */
     private Date ts;
     /**
-     * 删除标记
+     * 归档标记   默认0标识有效 1标识归档  4标识全量暂时标记 10标识暂时标记存在
      */
     private int archived;
 }

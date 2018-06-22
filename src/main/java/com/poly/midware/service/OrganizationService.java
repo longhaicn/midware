@@ -1,9 +1,6 @@
 package com.poly.midware.service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.poly.midware.entity.OrganizationEntity;
 import com.poly.midware.entity.sso.SCIMExtendField;
 import com.poly.midware.entity.sso.SystemOrganizationSCIM;
@@ -36,14 +33,9 @@ public class OrganizationService {
 
     //1.插入一条记录
     public JsonResult<String> insert(OrganizationEntity organizationEntity) {
-
         JsonResult result = new JsonResult();
         try {
-//            String token = TokenUtils.getToken();
             int row = organizationMapper.insert(organizationEntity);
-//            String url=SsoApi.SSOBaseUrl+SsoApi.ORGANIZATION+SsoApi.TOKEN+token;
-//            String res = HttpUtils.doPost(url, JSONObject.parseObject(JSONArray.toJSON(organizationEntity).toString()),"utf-8");
-//            System.out.println(res);
             if (row > 0) {
                 result.setRow(row);
                 result.setData(Message.INSERTED);
@@ -69,8 +61,6 @@ public class OrganizationService {
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_4000);
             result.setExpCode(ExceptionCode.EXCEPTION_CODE_4000);
         }
-
-
         return result;
     }
 
@@ -86,8 +76,6 @@ public class OrganizationService {
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_4000);
             result.setExpCode(ExceptionCode.EXCEPTION_CODE_4000);
         }
-
-
         return result;
     }
 
@@ -111,11 +99,18 @@ public class OrganizationService {
 
         JsonResult result = new JsonResult();
         try {
-            int row = organizationMapper.updateByOrganizationUuid(o.getOrganizationSetid(),o.getOrganizationUuid(),o.getOrganization(),o.getParentUuid(),o.getLinkingCode(),o.getCreateTime(),o.getTs(),o.getUniqueId());
-//            int row = organizationMapper.updateByOrganizationUuid(o);
+            int row =  organizationMapper.updateByOuKey(o.getOrganizationSetid(),
+                    o.getOrganizationUuid(),
+                    o.getOrganizationKey(),
+                    o.getOrganization(),
+                    o.getParentUuid(),
+                    o.getParentKey(),
+                    o.getChildrenOuUuid(),
+                    o.getChildrenKey(),
+                    o.getLinkingCode(),
+                    o.getTs());
             result.setData(Message.UPDATED);
             result.setRow(row);
-
         } catch (Exception e) {
             result.setCode(0);
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_4000);
@@ -143,6 +138,7 @@ public class OrganizationService {
         return result;
 
     }
+
     //5.删除所有记录
     public JsonResult<String> deleteAllOrganization() {
         JsonResult result = new JsonResult();
@@ -177,53 +173,47 @@ public class OrganizationService {
         return result;
     }
 
-    public JsonResult<String> organizationInfluenced(List<OrganizationEntity> listNew, List<OrganizationEntity> listDelete, List<OrganizationEntity> listUpdate) {
+    public JsonResult<String> organizationInfluenced(String data) {
         JsonResult result = new JsonResult();
-        Date date = new Date();
-        String token = TokenUtils.getToken();
-        String url = "";
         try {
-            for (OrganizationEntity o : listUpdate) {
-                int count = organizationMapper.check(o.getUniqueId()).getNumber();
-                System.out.println("count="+count);
-                if(1 == count){
-                    organizationMapper.updateByOrganizationUuid(o.getOrganizationSetid(),o.getOrganizationUuid(),o.getOrganization(),o.getParentUuid(),o.getLinkingCode(),o.getCreateTime(),o.getTs(),o.getUniqueId());
-                    o.setTs(date);
-                    o.setArchived(2);
-                    organizationMapper.insertOrganizationView(o);
-
-                }else if(0 == count){
-                    System.out.println(0);
-                    listNew.add(o);
+            List<OrganizationEntity> list =OrganizationImpl.parseJsonInfluenceOrganization(data);
+            for (OrganizationEntity o : list) {
+                switch (o.getArchived()){
+                    case 1:
+                        //1.1判断为新增数据，插入变动表
+                        organizationMapper.insertView(o);
+                        //1.2插入主表中
+                        organizationMapper.insert(o);
+                        break;
+                    case 2:
+                        //2.1判断数据是否存在，存在则修改，不存在则新增
+                       if(1 == organizationMapper.checkOuKey(o.getOrganizationKey()).getNumber()) {
+                           organizationMapper.insertView(o);
+                           organizationMapper.updateByOuKey(o.getOrganizationSetid(),
+                                   o.getOrganizationUuid(),
+                                   o.getOrganizationKey(),
+                                   o.getOrganization(),
+                                   o.getParentUuid(),
+                                   o.getParentKey(),
+                                   o.getChildrenOuUuid(),
+                                   o.getChildrenKey(),
+                                   o.getLinkingCode(),
+                                   o.getTs());
+                       }else {
+                           o.setArchived(1);
+                           organizationMapper.insertView(o);
+                           organizationMapper.insert(o);
+                       }
+                       break;
+                    case 3:
+                        organizationMapper.insertView(o);
+                        organizationMapper.deleteByOuKey(o.getOrganizationKey());
+                        break;
+                    default:
+                        break;
                 }
             }
 
-            for (OrganizationEntity e : listNew) {
-                int count = organizationMapper.check(e.getUniqueId()).getNumber();
-                System.out.println("count="+count);
-                if(0 == count){
-                    organizationMapper.insert(e);
-                    e.setTs(date);
-                    e.setArchived(1);
-                    organizationMapper.insertOrganizationView(e);
-
-                }else {
-                    System.out.println(10);
-                }
-            }
-
-            for (OrganizationEntity e : listDelete) {
-                int count = organizationMapper.check(e.getUniqueId()).getNumber();
-                System.out.println("count="+count);
-                if(1 == count){
-                    organizationMapper.deleteByOrganizationUuid(e.getUniqueId());
-                    e.setTs(date);
-                    e.setArchived(3);
-                    organizationMapper.insertOrganizationView(e);
-                }else {
-                    System.out.println(20);
-                }
-            }
         } catch (Exception e) {
             result.setCode(0);
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_4000);
@@ -236,7 +226,6 @@ public class OrganizationService {
         JsonResult result = new JsonResult();
         try {
             List<OrganizationEntity> list = organizationMapper.selectUMUN();
-            result.setData(OrganizationImpl.parseList2Tree(list));
             result.setRow(list.size());
         } catch (Exception e) {
             result.setCode(0);
@@ -258,6 +247,7 @@ public class OrganizationService {
                 i++;
                 String str = JSONObject.toJSONString(s);
                 JSONObject object = JSONObject.parseObject(str);
+                System.out.println(s.toString());
                 String res = HttpUtils.doPost(SsoApi.SSOBaseUrl+SsoApi.ORGANIZATION+SsoApi.TOKEN+token,object,"utf-8");
                 System.out.println("有妈的孩子：i="+i+","+res);
                 result.setData(res);
@@ -270,6 +260,7 @@ public class OrganizationService {
         }
         return result;
     }
+
 
     private boolean hasParentOU(String s) {
         OrganizationEntity organizationEntity = organizationMapper.queryOrganizationByUuid(s);
@@ -304,6 +295,10 @@ public class OrganizationService {
                     JSONObject object = JSONObject.parseObject(str);
                     String res = HttpUtils.doPost(SsoApi.SSOBaseUrl+SsoApi.ORGANIZATION+SsoApi.TOKEN+token,object,"utf-8");
                     System.out.println("insert"+res);
+                    JSONObject obj =JSONObject.parseObject(res);
+                    if(0 == obj.getInteger("errorNumber")){
+                        organizationMapper.success(entity.getOrganizationUuid(),11);
+                    }
                 }else if(2 == entity.getArchived()){
                     s.setOrganizationUuid(entity.getOrganizationUuid());
                     s.setOrganization(entity.getOrganization());
@@ -318,25 +313,51 @@ public class OrganizationService {
                     System.out.println(entity.toString());
                     String res = HttpUtils.doPut(SsoApi.SSOBaseUrl+SsoApi.ORGANIZATION+SsoApi.TOKEN+token,object,"utf-8");
                     System.out.println("update"+res);
+                    JSONObject obj =JSONObject.parseObject(res);
+                    if(0 == obj.getInteger("errorNumber")){
+                        organizationMapper.success(entity.getOrganizationUuid(),12);
+                    }
                 }else if(3 == entity.getArchived()){
                     System.out.println(entity.toString());
                     String url =SsoApi.SSOBaseUrl+SsoApi.ORGANIZATION+SsoApi.TOKEN+token+"&id="+entity.getOrganizationUuid();
                     String res =HttpUtils.doDelete(url,"utf-8");
                     System.out.println(url);
                     System.out.println("delete"+res);
+                    JSONObject obj =JSONObject.parseObject(res);
+                    if(0 == obj.getInteger("errorNumber")){
+                        organizationMapper.success(entity.getOrganizationUuid(),13);
+                    }
                 }
             }
-
         } catch (Exception e){
             result.setCode(0);
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_4000);
             result.setExpCode(ExceptionCode.EXCEPTION_CODE_4000);
         }
         return result;
+    }
 
-
-
-
+    public JsonResult<String> ssoOrganizationReset() {
+        String token = TokenUtils.getToken();
+        JsonResult result = new JsonResult();
+        try {
+            List<OrganizationEntity> list = organizationMapper.select();
+            List<SystemOrganizationSCIM> lists = OrganizationImpl.list2Tree(list);
+            int i = 0;
+            for (SystemOrganizationSCIM s:lists){
+                i++;
+                String url = SsoApi.SSOBaseUrl + SsoApi.ORGANIZATION + SsoApi.TOKEN + token + "&id=" + s.getOrganizationUuid();
+                String res = HttpUtils.doDelete(url, "utf-8");
+                System.out.println("有妈的孩子：i="+i+","+res);
+                result.setData(res);
+            }
+            result.setRow(lists.size());
+        } catch (Exception e) {
+            result.setCode(0);
+            result.setExpMsg(ExceptionCode.EXCEPTION_MSG_4000);
+            result.setExpCode(ExceptionCode.EXCEPTION_CODE_4000);
+        }
+        return result;
 
     }
 }

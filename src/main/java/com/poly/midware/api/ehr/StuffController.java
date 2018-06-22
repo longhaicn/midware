@@ -57,11 +57,7 @@ public class StuffController {
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_1000);
             result.setExpCode(ExceptionCode.EXCEPTION_CODE_1000);
         }else {
-            Map<String,List<StuffEntity>> map = StuffImpl.parseJsonInfluenceStuff(data);
-            List<StuffEntity> listNew =  map.get("New");
-            List<StuffEntity> listDelete = map.get("Delete");
-            List<StuffEntity> listUpdate =  map.get("Update");
-            result =  stuffService.stuffInfluenced(listNew,listDelete,listUpdate);
+            result =  stuffService.stuffInfluenced(data);
         }
         return result;
     }
@@ -136,6 +132,12 @@ public class StuffController {
     @RequestMapping(method = RequestMethod.GET, value = "/ssoStuffPushAll")
     public JsonResult<String>  ssoStuffPushAll(HttpServletRequest request){
         return stuffService.ssoStuffPushAll();
+    }
+    @IgnoreAuth
+    @ApiOperation(value = "SSO清空人员")
+    @RequestMapping(method = RequestMethod.GET, value = "/ssoStuffReset")
+    public JsonResult<String>  ssoStuffReset(HttpServletRequest request){
+        return stuffService.ssoStuffReset();
     }
 
     @IgnoreAuth

@@ -141,48 +141,44 @@ public class StuffService {
         return result;
     }
 
-    public JsonResult stuffInfluenced(List<StuffEntity> listNew, List<StuffEntity> listDelete, List<StuffEntity> listUpdate) {
+    public JsonResult stuffInfluenced(String data) {
+
         JsonResult result = new JsonResult();
-        Date date = new Date();
         try {
-            for (StuffEntity e : listUpdate) {
-                int count = stuffMapper.check(e.getUniqueId()).getNumber();
-                System.out.println("count="+count);
-                if(1 == count){
-                    stuffMapper.updateStuff(e);
-                    e.setTs(date);
-                    e.setArchived(2);
-                    stuffMapper.ssoStuffInsert(e);
-                    System.out.println(e.toString());
-                }else if(0 == count){
-                    System.out.println(0);
-                    listNew.add(e);
-                }
-            }
-
-            for (StuffEntity e : listNew) {
-                int count = stuffMapper.check(e.getUniqueId()).getNumber();
-                System.out.println("count="+count);
-                if(0 == count){
-                    stuffMapper.insert(e);
-                    e.setTs(date);
-                    e.setArchived(1);
-                    stuffMapper.ssoStuffInsert(e);
-                }else {
-                    System.out.println(10);
-                }
-            }
-
-            for (StuffEntity e : listDelete) {
-                int count = stuffMapper.check(e.getUniqueId()).getNumber();
-                System.out.println("count="+count);
-                if(1 == count){
-                    stuffMapper.archiveStuff(e.getUniqueId());
-                    e.setTs(date);
-                    e.setArchived(3);
-                    stuffMapper.ssoStuffInsert(e);
-                }else {
-                    System.out.println(20);
+            List<StuffEntity> list =StuffImpl.parseJsonInfluenceStuff(data);
+            for (StuffEntity o : list) {
+                switch (o.getArchived()){
+                    case 1:
+                        //1.1判断为新增数据，插入变动表
+                        stuffMapper.insertView(o);
+                        //1.2插入主表中
+                        stuffMapper.insert(o);
+                        break;
+                    case 2:
+                        //2.1判断数据是否存在，存在则修改，不存在则新增
+                        if(1 == stuffMapper.checkUser(o.getUserName()).getNumber()) {
+                            //插入变动表
+                            stuffMapper.insertView(o);
+                            //更新主表
+                            o.setArchived(0);
+                            stuffMapper.updateByUserName(o);
+                        }else {
+                            //插入变动表
+                            o.setArchived(1);
+                            stuffMapper.insertView(o);
+                            //插入主表
+                            o.setArchived(0);
+                            stuffMapper.insert(o);
+                        }
+                        break;
+                    case 3:
+                        //插入变动表
+                        stuffMapper.insertView(o);
+                        //修改主表
+                        stuffMapper.archiveByUserName(o.getUserName());
+                        break;
+                    default:
+                        break;
                 }
             }
 
@@ -229,7 +225,7 @@ public class StuffService {
         String token = TokenUtils.getToken();
         JsonResult result = new JsonResult();
         try {
-            List<StuffEntity> list = stuffMapper.ssoStuffPushAll();
+            List<StuffEntity> list = stuffMapper.ssoStuffPushPartial();
             for (StuffEntity entity : list) {
                 if(1 == entity.getArchived()){
                     SystemAccountAPIDto s = StuffImpl.ssoStuffParsing(entity);
@@ -237,16 +233,28 @@ public class StuffService {
                     JSONObject object = JSONObject.parseObject(str);
                     String res = HttpUtils.doPost(SsoApi.SSOBaseUrl+SsoApi.ACCOUNT+SsoApi.TOKEN+token,object,"utf-8");
                     result.setData(res);
+                    JSONObject obj =JSONObject.parseObject(res);
+                    if(0 == obj.getInteger("errorNumber")){
+                        stuffMapper.success(entity.getUserName(),11);
+                    }
                 }else if(2 == entity.getArchived()){
                     SystemAccountAPIDto s = StuffImpl.ssoStuffParsing(entity);
                     String str = JSONObject.toJSONString(s);
                     JSONObject object = JSONObject.parseObject(str);
                     String res = HttpUtils.doPut(SsoApi.SSOBaseUrl+SsoApi.ACCOUNT+SsoApi.TOKEN+token,object,"utf-8");
                     result.setData(res);
+                    JSONObject obj =JSONObject.parseObject(res);
+                    if(0 == obj.getInteger("errorNumber")){
+                        stuffMapper.success(entity.getUserName(),12);
+                    }
                 }else if(3 == entity.getArchived()){
                     SystemAccountAPIDto s = StuffImpl.ssoStuffParsing(entity);
                     String res =HttpUtils.doDelete(SsoApi.SSOBaseUrl+SsoApi.ACCOUNT+SsoApi.TOKEN+token+"&id="+s.getId(),"utf-8");
                     result.setData(res);
+                    JSONObject obj =JSONObject.parseObject(res);
+                    if(0 == obj.getInteger("errorNumber")){
+                        stuffMapper.success(entity.getUserName(),13);
+                    }
                 }
             }
 
@@ -256,5 +264,34 @@ public class StuffService {
             result.setExpCode(ExceptionCode.EXCEPTION_CODE_4000);
         }
         return result;
+    }
+
+    public JsonResult<String> ssoStuffReset() {
+        String token = TokenUtils.getToken();
+        JsonResult result = new JsonResult();
+        try {
+            List<StuffEntity> list = stuffMapper.ssoStuffPushAll();
+            int i=0;
+            for (StuffEntity entity:list) {
+                i++;
+                if (i>15){
+                    break;
+                }
+                System.out.println(entity.toString());
+                SystemAccountAPIDto s = StuffImpl.ssoStuffParsing(entity);
+                String res = HttpUtils.doDelete(SsoApi.SSOBaseUrl + SsoApi.ACCOUNT + SsoApi.TOKEN + token + "&id=" + s.getId(), "utf-8");
+                System.out.println(res);
+                result.setData(res);
+            }
+            result.setRow(list.size());
+        } catch (Exception e) {
+            result.setCode(0);
+            result.setExpMsg(ExceptionCode.EXCEPTION_MSG_4000);
+            result.setExpCode(ExceptionCode.EXCEPTION_CODE_4000);
+        }
+        return result;
+
+
+
     }
 }

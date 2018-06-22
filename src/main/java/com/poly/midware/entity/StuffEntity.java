@@ -5,14 +5,10 @@ import java.util.Date;
  * 员工实体
  */
 @Data
-public class StuffEntity implements java.io.Serializable{
+public class StuffEntity implements java.io.Serializable {
 
     /**数据库流水ID*/
 //    private int id;
-    /**
-     * 数据唯一标识ID
-     */
-    private String uniqueId;
     /**
      * 平台主账户 工号 E0127
      */
@@ -51,6 +47,10 @@ public class StuffEntity implements java.io.Serializable{
      */
     private String jobId;
     /**
+     * 岗位Key unique_id
+     */
+    private String jobKey;
+    /**
      * 岗位名称 codeitemdesc
      */
     private String jobName;
@@ -61,12 +61,15 @@ public class StuffEntity implements java.io.Serializable{
     /**
      * 是否转正 A32 C3210字段
      */
-
     private String status;
     /**
      * 所属组织机构的uuid
      */
     private String organizationUuid;
+    /**
+     * 所属组织机构的uuid
+     */
+    private String organizationKey;
     /**
      * 组织机构名称 E0122（部门）
      */
@@ -78,6 +81,7 @@ public class StuffEntity implements java.io.Serializable{
     /**
      * 创建时间
      */
+
     private Date createTime;
     /**
      * 最后操作时间
@@ -87,4 +91,5 @@ public class StuffEntity implements java.io.Serializable{
      * 删除标记
      */
     private int archived;
+
 }

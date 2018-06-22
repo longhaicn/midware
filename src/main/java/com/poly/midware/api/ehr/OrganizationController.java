@@ -8,10 +8,12 @@ import com.poly.midware.utils.annotation.IgnoreAuth;
 import com.poly.midware.utils.response.JsonResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +33,7 @@ public class OrganizationController {
     OrganizationService organizationService;
 
     @IgnoreAuth
-    @ApiOperation(value = "新增一条组织架构信息")
+    @ApiOperation(value = "全量同步组织架构信息")
     @RequestMapping(method = RequestMethod.POST, value = "/organizationInterestSave")
     public JsonResult<String> organizationInterestSave(HttpServletRequest request, @RequestBody String data) {
         JsonResult result = new JsonResult();
@@ -55,20 +57,18 @@ public class OrganizationController {
     @ApiOperation(value = "增量同步组织架构信息")
     @RequestMapping(method = RequestMethod.POST, value = "/organizationInfluencedSave")
     public JsonResult<String> organizationInfluencedSave(HttpServletRequest request, @RequestBody String data) {
+
         JsonResult result = new JsonResult();
         if(data.isEmpty()||data.length()<10){
             result.setCode(0);
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_1000);
             result.setExpCode(ExceptionCode.EXCEPTION_CODE_1000);
         }else {
-            Map<String ,List<OrganizationEntity>> map = OrganizationImpl.parseJsonInfluenceOrganization(data);
-            List<OrganizationEntity> listNew =  map.get("New");
-            List<OrganizationEntity> listDelete = map.get("Delete");
-            List<OrganizationEntity> listUpdate =  map.get("Update");
-            result =  organizationService.organizationInfluenced(listNew,listDelete,listUpdate);
+            result =  organizationService.organizationInfluenced(data);
         }
         return result;
     }
+
     @IgnoreAuth
     @ApiOperation(value = "删除一条组织架构信息")
     @RequestMapping(method = RequestMethod.POST, value = "/organizationInterestDelete")
@@ -159,11 +159,18 @@ public class OrganizationController {
     }
 
     @IgnoreAuth
+    @ApiOperation(value = "SSO清空组织架构")
+    @RequestMapping(method = RequestMethod.POST, value = "/ssoOrganizationReset")
+    public JsonResult<String> ssoOrganizationReset(HttpServletRequest request){
+        System.out.println(200);
+        return  organizationService.ssoOrganizationReset();
+    }
+
+    @IgnoreAuth
     @ApiOperation(value = "SSO部分同步组织架构信息列表")
     @RequestMapping(method = RequestMethod.POST, value = "/ssoOrganizationPushPartial")
     public JsonResult<String> ssoOrganizationPushPartial(HttpServletRequest request){
         return organizationService.ssoOrganizationPushPartial();
     }
-
 
 }

@@ -28,7 +28,6 @@ public class StuffImpl {
         for (int i = 0; i < ja.size(); i++) {
             entity = new StuffEntity();
             JSONObject jsonObject = ja.getJSONObject(i);
-            entity.setUniqueId(jsonObject.getString("uniqueId"));
             entity.setUserName(jsonObject.getString("userName"));
             entity.setDisplayName(jsonObject.getString("displayName"));
             entity.setGender(jsonObject.getString("gender"));
@@ -39,9 +38,11 @@ public class StuffImpl {
             entity.setIdCard(jsonObject.getString("idCard"));
             entity.setStatus(jsonObject.getString("status"));
             entity.setJobId(jsonObject.getString("jobId"));
+            entity.setJobKey(jsonObject.getString("jobKey"));
             entity.setJobName(jsonObject.getString("jobName"));
             entity.setJobGrade(jsonObject.getString("jobGrade"));
             entity.setOrganizationUuid(jsonObject.getString("organizationUuid"));
+            entity.setOrganizationKey(jsonObject.getString("organizationKey"));
             entity.setOrganizationName(jsonObject.getString("organizationName"));
             entity.setCreateTime(jsonObject.getDate("createTime"));
             entity.setTs(jsonObject.getDate("ts"));
@@ -51,28 +52,24 @@ public class StuffImpl {
         }
         return list;
     }
-    public static Map<String,List<StuffEntity>> parseJsonInfluenceStuff(String data) {
-        Map<String, List<StuffEntity>> map = new HashMap<String, List<StuffEntity>>();
-        List<StuffEntity> listNew = new ArrayList<>();
-        List<StuffEntity> listDelete = new ArrayList<>();
-        List<StuffEntity> listUpdate = new ArrayList<>();
-
+    public static List<StuffEntity> parseJsonInfluenceStuff(String data) {
+        List<StuffEntity> list = new ArrayList<>();
         StuffEntity entity = null;
         JSONObject json = JSON.parseObject(data);
         JSONArray ja = (JSONArray) json.get("list");
         for (int i = 0; i < ja.size(); i++) {
             entity = new StuffEntity();
             JSONObject jsonObject = ja.getJSONObject(i);
-            int flag = jsonObject.getInteger("archived");
-            entity.setUniqueId(jsonObject.getString("uniqueId"));
             entity.setUserName(jsonObject.getString("userName"));
             entity.setGender(jsonObject.getString("gender"));
             entity.setIdCard(jsonObject.getString("idCard"));
             entity.setStatus(jsonObject.getString("status"));
             entity.setJobId(jsonObject.getString("jobId"));
+            entity.setJobKey(jsonObject.getString("jobKey"));
             entity.setJobName(jsonObject.getString("jobName"));
             entity.setJobGrade(jsonObject.getString("jobGrade"));
             entity.setOrganizationUuid(jsonObject.getString("organizationUuid"));
+            entity.setOrganizationKey(jsonObject.getString("organizationKey"));
             entity.setOrganizationName(jsonObject.getString("organizationName"));
             entity.setDisplayName(jsonObject.getString("displayName"));
             entity.setPinyinName(jsonObject.getString("pinyinName"));
@@ -81,20 +78,12 @@ public class StuffImpl {
             entity.setLeader(jsonObject.getString("leader"));
             entity.setCreateTime(jsonObject.getDate("createTime"));
             entity.setTs(jsonObject.getDate("ts"));
-            entity.setArchived(0);
+            entity.setArchived(jsonObject.getInteger("archived"));
             entity.setRole("0");//臻家默认角色
-            if(3 == flag){
-                listDelete.add(entity);
-            }else if(2 == flag){
-            listUpdate.add(entity);
-            }else if (1 == flag) {
-                listNew.add(entity);
-            }
+
+            list.add(entity);
         }
-        map.put("New",listNew);
-        map.put("Delete",listDelete);
-        map.put("Update",listUpdate);
-        return map;
+        return list;
     }
 //
 //    public static List<SystemAccountAPIDto> ssoStuffListParsing(List<StuffEntity> list) {
@@ -159,7 +148,7 @@ public class StuffImpl {
         PhoneNumberSCIM phoneNumberSCIM = new PhoneNumberSCIM();
         List<PhoneNumberSCIM> listPhoneNumberSCIM = new ArrayList<>();
         systemAccountAPIDto.setDisplayName(entity.getDisplayName());
-        belongs.setBelongOuUuid(entity.getOrganizationUuid());
+        belongs.setBelongOuUuid(entity.getOrganizationKey());
         listBelongs.add(belongs);
         systemAccountAPIDto.setBelongs(listBelongs);
         emailSCIM.setValue(entity.getEmails());
@@ -171,6 +160,7 @@ public class StuffImpl {
         map.put("status",entity.getStatus());
         map.put("leader",entity.getLeader());
         map.put("jobId",entity.getJobId());
+        map.put("jobKey",entity.getJobKey());
         map.put("jobGrade",entity.getJobGrade());
         map.put("jobName",entity.getJobName());
         map.put("pinyinName",entity.getPinyinName());
@@ -186,5 +176,7 @@ public class StuffImpl {
         systemAccountAPIDto.setPhoneNumbers(listPhoneNumberSCIM);
         return  systemAccountAPIDto;
     }
+
+
 }
 

@@ -42,13 +42,13 @@ public interface StuffMapper {
     @Update("UPDATE stuff SET archived='4' WHERE id > 0;")
     int archiveAllStuff();
 
-    @Select("SELECT count(uniqueId) as number FROM stuff where uniqueId = #{uniqueId};")
-    CountNumberModel check(String uniqueId);
+    @Select("SELECT count(uniqueId) as number FROM stuff where userName = #{userName};")
+    CountNumberModel checkUser(String userName);
 
-    @Update("UPDATE stuff SET archived='1' WHERE id > 0 AND uniqueId = #{uniqueId};")
+    @Update("UPDATE stuff SET archived='1' WHERE id > 0 AND userName = #{userName};")
     void archiveStuff(String uniqueId);
 
-    @Update("UPDATE stuff (#{stuff}) WHERE uniqueId = #{uniqueId}")
+    @Update("UPDATE stuff (#{stuff}) WHERE uniqueId = #{userName}")
     @Lang(SimpleUpdateLangDriver.class)
     void updateStuff(StuffEntity stuff);
 
@@ -59,4 +59,17 @@ public interface StuffMapper {
 
     @Select("SELECT * FROM stuff WHERE archived='0';")
     List<StuffEntity> ssoStuffPushAll();
+
+    @Select("SELECT * FROM stuff_view WHERE archived<'10';")
+    List<StuffEntity> ssoStuffPushPartial();
+
+    @Update("UPDATE stuff_view SET archived=#{archived} WHERE id > 0 AND userName=#{userName};")
+    void success( @Param("userName")String userName,  @Param("archived")int archived);
+
+    @Insert("INSERT INTO stuff_view(#{stuffEntity})")
+    @Lang(SimpleInsertLangDriver.class)
+    int insertView(StuffEntity stuffEntity);
+
+    @Update("UPDATE stuff SET archived='1' WHERE id > 0 AND userName=#{userName};")
+    void archiveByUserName(String userName);
 }
