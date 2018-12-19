@@ -79,6 +79,7 @@ public class HttpUtils {
                 httpClient = new DefaultHttpClient();
             }
             httpPost = new HttpPost(url);
+            System.out.println(jsonObject.toString());
             StringEntity entity = new StringEntity(jsonObject.toString(), charset);
             entity.setContentEncoding("UTF-8");
             entity.setContentType("application/json");

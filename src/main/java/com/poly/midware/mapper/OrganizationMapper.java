@@ -89,7 +89,7 @@ public interface OrganizationMapper {
     void archiveRelease();
 
     @Update("UPDATE organization_view SET archived=#{archived} WHERE id > 0 AND organizationKey=#{organizationKey};")
-   void success( @Param("organizationKey")String organizationKey,  @Param("archived")int archived);
+    void success( @Param("organizationKey")String organizationKey,  @Param("archived")int archived);
 
     @Update("UPDATE organization SET archived='1' WHERE id>0 AND organizationKey = #{organizationKey};")
     void deleteByOuKey(String organizationKey);

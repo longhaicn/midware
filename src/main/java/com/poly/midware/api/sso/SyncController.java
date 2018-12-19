@@ -36,7 +36,7 @@ public class SyncController {
         return  syncService.syncEvent();
     }
 
-    @Scheduled(cron = "0 * 5 * * ?")
+//    @Scheduled(cron = "0 * 5 * * ?")
     public void taskDate(){
         System.out.println("###############################每十二小时差异同步组织架构###############################");
         Calendar calendar = Calendar.getInstance();
