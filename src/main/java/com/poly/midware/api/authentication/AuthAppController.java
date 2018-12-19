@@ -15,10 +15,20 @@ import javax.annotation.Resource;
 public class AuthAppController {
 
     @Resource
-    private AuthAppService authAppService;
+    AuthAppService authAppService;
 
     @IgnoreAuth
-    @ApiOperation(value = "测试连接数据")
+    @ApiOperation(value = "为一个用户配置一个应用权限的开或关")
+    @PostMapping(value = "/authConfigure")
+    public JsonResult<String> authConfigure(String username,String appcode,int auth) {
+        if(null == username || null == appcode){
+            return null;
+        }
+        return authAppService.authConfigure(username,appcode,auth);
+    }
+
+    @IgnoreAuth
+    @ApiOperation(value = "新增一个平台认证应用")
     @PostMapping(value = "/insertAuth")
     public JsonResult<String> insertAuth() {
 
@@ -27,37 +37,29 @@ public class AuthAppController {
     }
 
     @IgnoreAuth
-    @ApiOperation(value = "测试连接数据")
+    @ApiOperation(value = "修改一个平台认证应用信息")
     @PostMapping(value = "/updateAuth")
     public JsonResult<String> updateAuth() {
-
-
         return authAppService.updateAuth();
     }
 
     @IgnoreAuth
-    @ApiOperation(value = "测试连接数据")
+    @ApiOperation(value = "删除一个平台认证应用")
     @PostMapping(value = "/deleteAuth")
     public JsonResult<String> deleteAuth() {
-
-
         return authAppService.deleteAuth();
     }
 
     @IgnoreAuth
-    @ApiOperation(value = "测试连接数据")
+    @ApiOperation(value = "查询一个平台认证应用")
     @PostMapping(value = "/selectAuth")
     public JsonResult<String> selectAuth() {
-
-
         return authAppService.selectAuth();
     }
     @IgnoreAuth
-    @ApiOperation(value = "测试连接数据")
-    @PostMapping(value = "/selectAuth")
+    @ApiOperation(value = "查询所有平台认证应用")
+    @PostMapping(value = "/selectAuthList")
     public JsonResult<String> selectAuthList() {
-
-
         return authAppService.selectAuthList();
     }
 

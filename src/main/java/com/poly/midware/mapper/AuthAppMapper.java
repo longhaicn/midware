@@ -1,6 +1,6 @@
 package com.poly.midware.mapper;
 
-import com.poly.midware.entity.AuthAppEntity;
+import com.poly.midware.entity.AppInfoEntity;
 import com.poly.midware.utils.driver.SimpleInsertLangDriver;
 import org.apache.ibatis.annotations.*;
 
@@ -11,14 +11,14 @@ public interface AuthAppMapper {
 
     @Insert("INSERT INTO authapp(#{authapp})")
     @Lang(SimpleInsertLangDriver.class)
-    void insertAuth(AuthAppEntity authapp);
+    void insertAuth(AppInfoEntity authapp);
 
     @Update("UPDATE authapp SET " +
             "appname = #{appname}," +
             "appcode = #{appcode}," +
             "appuuid = #{appuuid}," +
             "WHERE appcode = #{appcode};")
-    void updateAuth(@Param("id") String id,
+    void updateAuth(@Param("id") int id,
                     @Param("appname") String appname,
                     @Param("appcode") String appcode,
                     @Param("appuuid") String appuuid );
@@ -26,7 +26,9 @@ public interface AuthAppMapper {
     @Delete("DELETE FROM authapp WHERE appcode = #{appcode}")
     void deleteAuth(String appcode);
 
-    AuthAppEntity selectAuth();
+    @Select("SELECT * FROM authapp WHERE appcode= #{appcode}")
+    AppInfoEntity selectAuth(String appcode);
 
-    List<AuthAppEntity> selectAuthList();
+    @Select("SELECT * FROM authapp;")
+    List<AppInfoEntity> selectAuthList();
 }

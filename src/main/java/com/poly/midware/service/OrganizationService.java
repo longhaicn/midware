@@ -247,9 +247,9 @@ public class OrganizationService {
                 i++;
                 String str = JSONObject.toJSONString(s);
                 JSONObject object = JSONObject.parseObject(str);
-                System.out.println(s.toString());
+//                System.out.println(s.toString());
                 String res = HttpUtils.doPost(SsoApi.SSOBaseUrl+SsoApi.ORGANIZATION+SsoApi.TOKEN+token,object,"utf-8");
-                System.out.println("有妈的孩子：i="+i+","+res);
+//                System.out.println("有妈的孩子：i="+i+","+res);
                 result.setData(res);
             }
             result.setRow(lists.size());

@@ -1,40 +1,25 @@
 package com.poly.midware.api.authentication;
 
-import com.alibaba.fastjson.JSONObject;
-import com.poly.midware.impl.SyncImpl;
-import com.poly.midware.utils.HttpUtils;
-import com.poly.midware.utils.TokenUtils;
-import com.poly.midware.utils.constant.SsoApi;
+import com.poly.midware.service.AuthInfoService;
+import com.poly.midware.utils.annotation.IgnoreAuth;
 import com.poly.midware.utils.response.JsonResult;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Resource;
 
+@RestController
 public class AuthInfoController {
 
-    public JsonResult<String> authernticate() {
-        String token = TokenUtils.getToken();
-        JsonResult result = new JsonResult();
-        JSONObject object = new JSONObject();
-        String username = "18032219";
+    @Resource
+    private AuthInfoService authInfoService;
+    @IgnoreAuth
+    @ApiOperation(value = "测试连接数据")
+    @PostMapping(value = "/addauth")
+    public JsonResult<String> addauth(String username,String appcode,String auth) {
 
-//        String addedApplicationUuids[] = {};
-//        String deletedApplicationUuids[] = {"7dbd6fde37463c70bb571054c7ed8b195R9wZvFLDDm","4b45f96e2b6775427571bc9436a43139PUm2J4NiLRx"};
 
-        List<String> addlist = new ArrayList<>();
-        List<String> deletelist = new ArrayList<>();
-//
-        addlist.add("7dbd6fde37463c70bb571054c7ed8b195R9wZvFLDDm");
-        addlist.add("4b45f96e2b6775427571bc9436a43139PUm2J4NiLRx");
-
-        object.put("addedApplicationUuids",addlist);
-        object.put("deletedApplicationUuids", deletelist);
-
-        object = SyncImpl.toJSONObject(object);
-
-        String res = HttpUtils.doPost(SsoApi.SSOBaseUrl + SsoApi.AUTHENTICATION + username + SsoApi.TOKEN + token, object, "utf-8");
-        System.out.println(res);
-
-        return result;
+        return authInfoService.addauth(username,appcode,auth);
     }
 }
