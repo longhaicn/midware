@@ -1,6 +1,5 @@
 package com.poly.midware.api.sso;
 
-import com.poly.midware.service.StuffService;
 import com.poly.midware.service.SyncService;
 import com.poly.midware.utils.annotation.IgnoreAuth;
 import com.poly.midware.utils.response.JsonResult;
@@ -36,7 +35,7 @@ public class SyncController {
         return  syncService.syncEvent();
     }
 
-//    @Scheduled(cron = "0 * 5 * * ?")
+    @Scheduled(cron = "0 * 5 * * ?")
     public void taskDate(){
         System.out.println("###############################每十二小时差异同步组织架构###############################");
         Calendar calendar = Calendar.getInstance();

@@ -55,7 +55,36 @@ public class AuthAppService {
         return result;
     }
 
-    public JsonResult<String> authConfigure(String username,String appcode,int auth) {
+    public JsonResult<String> auth(List<String> usernames,String appcode) {
+        String token = TokenUtils.getToken();
+        JsonResult result = new JsonResult();
+        try {
+            JSONObject object = new JSONObject();
+            AppInfoEntity app = authAppMapper.selectAuth(appcode);
+            if (null == app){
+                result.setCode(0);
+                result.setExpMsg(ExceptionCode.EXCEPTION_MSG_4000);
+                result.setExpCode(ExceptionCode.EXCEPTION_CODE_4000);
+                return result;
+            }
+
+                List<String> addlist = new ArrayList<>();
+                addlist.add(app.getAppuuid());
+                object.put("addedApplicationUuids",addlist);
+            object = SyncImpl.toJSONObject(object);
+            for (String username: usernames) {
+                String res = HttpUtils.doPost(SsoApi.SSOBaseUrl + SsoApi.AUTHENTICATION + username + SsoApi.TOKEN + token, object, "utf-8");
+                result.setData(res);
+            }
+        }catch (Exception e){
+            result.setCode(0);
+            result.setExpMsg(ExceptionCode.EXCEPTION_MSG_4000);
+            result.setExpCode(ExceptionCode.EXCEPTION_CODE_4000);
+
+        }
+        return result;
+    }
+    public JsonResult<String> unauth(List<String> usernames,String appcode) {
         String token = TokenUtils.getToken();
         JsonResult result = new JsonResult();
 
@@ -68,18 +97,19 @@ public class AuthAppService {
                 result.setExpCode(ExceptionCode.EXCEPTION_CODE_4000);
                 return result;
             }
-            if(0 == auth){
                 List<String> deletelist = new ArrayList<>();
                 deletelist.add(app.getAppuuid());
                 object.put("deletedApplicationUuids", deletelist);
-            }else {
-                List<String> addlist = new ArrayList<>();
-                addlist.add(app.getAppuuid());
-                object.put("addedApplicationUuids",addlist);
-            }
+
             object = SyncImpl.toJSONObject(object);
-            String res = HttpUtils.doPost(SsoApi.SSOBaseUrl + SsoApi.AUTHENTICATION + username + SsoApi.TOKEN + token, object, "utf-8");
-            result.setData(res);
+
+            for (String username: usernames) {
+
+                String res = HttpUtils.doPost(SsoApi.SSOBaseUrl + SsoApi.AUTHENTICATION + username + SsoApi.TOKEN + token, object, "utf-8");
+                result.setData(res);
+            }
+
+
         }catch (Exception e){
             result.setCode(0);
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_4000);

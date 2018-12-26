@@ -26,7 +26,6 @@ public class ConnectionTestService {
         JsonResult<String> result = new JsonResult<>();
 
         try {
-            ;
                 result.setRow(connectionTestMapper.testConn());
                 result.setData(Message.SUCCES);
 

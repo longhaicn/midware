@@ -51,8 +51,6 @@ public class OrganizationController {
         return result;
     }
 
-
-
     @IgnoreAuth
     @ApiOperation(value = "增量同步组织架构信息")
     @RequestMapping(method = RequestMethod.POST, value = "/organizationInfluencedSave")
@@ -105,6 +103,7 @@ public class OrganizationController {
         }
         return result;
     }
+
     @IgnoreAuth
     @ApiOperation(value = "查询一条组织架构信息")
     @RequestMapping(method = RequestMethod.GET, value = "/organizationInterestQuery")
@@ -141,14 +140,12 @@ public class OrganizationController {
         return  organizationService.selectTreeUMUN();
     }
 
-
     @IgnoreAuth
     @ApiOperation(value = "过期组织架构信息列表")
     @RequestMapping(method = RequestMethod.GET, value = "/archiveAllOrganization")
     public JsonResult<String> archiveAllOrganization(HttpServletRequest request){
         return  organizationService.archiveAllOrganization();
     }
-
 
     @IgnoreAuth
     @ApiOperation(value = "SSO全量同步组织架构信息列表")
