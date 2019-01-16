@@ -3,19 +3,16 @@ package com.poly.midware.api.ehr;
 import com.poly.midware.entity.OrganizationEntity;
 import com.poly.midware.impl.OrganizationImpl;
 import com.poly.midware.service.OrganizationService;
-import com.poly.midware.utils.constant.ExceptionCode;
 import com.poly.midware.utils.annotation.IgnoreAuth;
+import com.poly.midware.utils.constant.ExceptionCode;
 import com.poly.midware.utils.response.JsonResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @ProjectName: midware
@@ -26,7 +23,7 @@ import java.util.Map;
  * <p>Copyright: Copyright (c) 2018</p>
  */
 
-@Api(value = "组织架构接口", description = "Organization Controller", basePath = "api", tags = "Organization APIS")
+@Api(value = "组织架构接口", description = "组织架构信息接口", basePath = "api", tags = "Organization Service APIS")
 @RestController
 public class OrganizationController {
     @Resource
@@ -34,7 +31,7 @@ public class OrganizationController {
 
     @IgnoreAuth
     @ApiOperation(value = "全量同步组织架构信息")
-    @RequestMapping(method = RequestMethod.POST, value = "/organizationInterestSave")
+    @PostMapping(value = "/organizationInterestSave")
     public JsonResult<String> organizationInterestSave(HttpServletRequest request, @RequestBody String data) {
         JsonResult result = new JsonResult();
         List<OrganizationEntity> list = OrganizationImpl.parseJsonAllOrganization(data);
@@ -53,7 +50,7 @@ public class OrganizationController {
 
     @IgnoreAuth
     @ApiOperation(value = "增量同步组织架构信息")
-    @RequestMapping(method = RequestMethod.POST, value = "/organizationInfluencedSave")
+    @PostMapping( value = "/organizationInfluencedSave")
     public JsonResult<String> organizationInfluencedSave(HttpServletRequest request, @RequestBody String data) {
 
         JsonResult result = new JsonResult();
@@ -69,7 +66,7 @@ public class OrganizationController {
 
     @IgnoreAuth
     @ApiOperation(value = "删除一条组织架构信息")
-    @RequestMapping(method = RequestMethod.POST, value = "/organizationInterestDelete")
+    @PostMapping(value = "/organizationInterestDelete")
     public JsonResult<String> organizationInterestDelete(HttpServletRequest request, @RequestParam("organizationUuid") String organizationUuid){
         JsonResult result = new JsonResult();
         if(organizationUuid.equals(null) || "".equals(organizationUuid.trim())){
@@ -84,14 +81,14 @@ public class OrganizationController {
 
     @IgnoreAuth
     @ApiOperation(value = "删除所有组织架构信息")
-    @RequestMapping(method = RequestMethod.GET, value = "/organizationReset")
+    @GetMapping( value = "/organizationReset")
     public JsonResult<String> deleteAllOrganization(HttpServletRequest request) {
         return organizationService.deleteAllOrganization();
     }
 
     @IgnoreAuth
     @ApiOperation(value = "更新一条组织架构信息")
-    @RequestMapping(method = RequestMethod.POST, value = "/organizationInterestUpdate")
+    @PostMapping(value = "/organizationInterestUpdate")
     public JsonResult<String> organizationInterestUpdate(HttpServletRequest request, @RequestBody OrganizationEntity organizationEntity){
         JsonResult result = new JsonResult();
         if(organizationEntity.equals(null)){
@@ -106,7 +103,7 @@ public class OrganizationController {
 
     @IgnoreAuth
     @ApiOperation(value = "查询一条组织架构信息")
-    @RequestMapping(method = RequestMethod.GET, value = "/organizationInterestQuery")
+    @GetMapping( value = "/organizationInterestQuery")
     public JsonResult<List<OrganizationEntity>> organizationInterestQuery(HttpServletRequest request,  String organizationUuid){
         JsonResult result = new JsonResult();
         if(organizationUuid.equals(null) || "".equals(organizationUuid.trim())){
@@ -121,28 +118,28 @@ public class OrganizationController {
 
     @IgnoreAuth
     @ApiOperation(value = "查询组织架构信息列表")
-    @RequestMapping(method = RequestMethod.GET, value = "/organizationInterestList")
+    @GetMapping( value = "/organizationInterestList")
     public JsonResult<List<OrganizationEntity>> organizationInterestList(HttpServletRequest request){
         return  organizationService.select();
     }
 
     @IgnoreAuth
     @ApiOperation(value = "查询组织架构信息列表UMUN")
-    @RequestMapping(method = RequestMethod.GET, value = "/organizationInterestListUMUN")
+    @GetMapping(value = "/organizationInterestListUMUN")
     public JsonResult<List<OrganizationEntity>> organizationInterestListUMUN(HttpServletRequest request){
         return  organizationService.selectUMUN();
     }
 
     @IgnoreAuth
     @ApiOperation(value = "查询组织架构信息列表UMUN树TREE")
-    @RequestMapping(method = RequestMethod.GET, value = "/organizationInterestTreeUMUN")
+    @GetMapping( value = "/organizationInterestTreeUMUN")
     public JsonResult<List<OrganizationEntity>> organizationInterestTreeUMUN(HttpServletRequest request){
         return  organizationService.selectTreeUMUN();
     }
 
     @IgnoreAuth
     @ApiOperation(value = "过期组织架构信息列表")
-    @RequestMapping(method = RequestMethod.GET, value = "/archiveAllOrganization")
+    @GetMapping(value = "/archiveAllOrganization")
     public JsonResult<String> archiveAllOrganization(HttpServletRequest request){
         return  organizationService.archiveAllOrganization();
     }
@@ -157,7 +154,7 @@ public class OrganizationController {
 
     @IgnoreAuth
     @ApiOperation(value = "SSO清空组织架构")
-    @RequestMapping(method = RequestMethod.POST, value = "/ssoOrganizationReset")
+    @PostMapping(value = "/ssoOrganizationReset")
     public JsonResult<String> ssoOrganizationReset(HttpServletRequest request){
         System.out.println(200);
         return  organizationService.ssoOrganizationReset();
@@ -165,7 +162,7 @@ public class OrganizationController {
 
     @IgnoreAuth
     @ApiOperation(value = "SSO部分同步组织架构信息列表")
-    @RequestMapping(method = RequestMethod.POST, value = "/ssoOrganizationPushPartial")
+    @PostMapping( value = "/ssoOrganizationPushPartial")
     public JsonResult<String> ssoOrganizationPushPartial(HttpServletRequest request){
         return organizationService.ssoOrganizationPushPartial();
     }

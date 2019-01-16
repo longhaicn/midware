@@ -11,23 +11,18 @@ import com.alibaba.fastjson.JSONObject;
  * <p>Copyright: Copyright (c) 2018</p>
  */
 public class SyncImpl {
-
     public static JSONObject toJSONObject(Object s) {
-
         String str = JSONObject.toJSONString(s);
         JSONObject object = JSONObject.parseObject(str);
         return object;
     }
 
-
     public static boolean successResult(String res) {
-
         JSONObject obj =JSONObject.parseObject(res);
         if(0 == obj.getInteger("errorNumber")){
             return true;
         }else {
             return false;
         }
-
     }
 }

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Version: 1.0
  * <p>Copyright: Copyright (c) 2018</p>
  */
-@Api(value = "连接测试接口", description = "Connection Test Controller", basePath = "api", tags = "Connection Test APIS")
+@Api(value = "连接测试接口", description = "工具性接口", basePath = "api", tags = "Connection Test APIS")
 @RestController
 public class ConnectionTestController {
     @Resource
@@ -26,7 +26,7 @@ public class ConnectionTestController {
 
     @IgnoreAuth
     @ApiOperation(value = "测试连接数据")
-    @RequestMapping(method = RequestMethod.GET, value = "/testConn")
+    @GetMapping(value = "/testConn")
     public JsonResult<String> testConn(HttpServletRequest request) {
 
         return  connectionTestService.testConn();
@@ -34,7 +34,7 @@ public class ConnectionTestController {
 
     @IgnoreAuth
     @ApiOperation(value = "获取上次同步时间戳")
-    @RequestMapping(method = RequestMethod.GET, value = "/influnencedDate")
+    @GetMapping(value = "/influnencedDate")
     public JsonResult<String> influnencedDate(HttpServletRequest request) {
 
         return  connectionTestService.influnencedDate();

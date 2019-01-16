@@ -9,7 +9,6 @@ package com.poly.midware.utils.constant;
  * <p>Copyright: Copyright (c) 2018</p>
  */
 public class ExceptionCode {
-
     /**没有异常*/
     public final static int EXCEPTION_CODE_0 = 0;
     public final static String EXCEPTION_MSG_0 = "正常";

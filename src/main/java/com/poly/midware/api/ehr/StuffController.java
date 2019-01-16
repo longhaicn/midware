@@ -22,14 +22,14 @@ import java.util.List;
  * @Version: 1.0
  * <p>Copyright: Copyright (c) 2018</p>
  */
-@Api(value = "人员接口", description = "Stuff Controller", basePath = "api", tags = "Stuff APIS")
+@Api(value = "人员接口", description = "人员信息同步接口", basePath = "api", tags = "Stuff Service APIS")
 @RestController
 public class StuffController {
     @Resource
     private StuffService stuffService;
     @IgnoreAuth
     @ApiOperation(value = "全量同步人员信息")
-    @RequestMapping(method = RequestMethod.POST, value = "/stuffInterestSave")
+    @PostMapping(value = "/stuffInterestSave")
     public JsonResult<String> stuffInterestSave(HttpServletRequest request, @RequestBody String data){
         JsonResult result = new JsonResult();
         List<StuffEntity> list = StuffImpl.parseJsonAllStuff(data);
@@ -47,7 +47,7 @@ public class StuffController {
 
     @IgnoreAuth
     @ApiOperation(value = "增量同步人员信息")
-    @RequestMapping(method = RequestMethod.POST, value = "/stuffInfluencedSave")
+    @PostMapping(value = "/stuffInfluencedSave")
     public JsonResult<String> stuffInfluencedSave(HttpServletRequest request, @RequestBody String data){
         JsonResult result = new JsonResult();
 
@@ -62,7 +62,7 @@ public class StuffController {
     }
     @IgnoreAuth
     @ApiOperation(value = "删除一条人员信息")
-    @RequestMapping(method = RequestMethod.POST, value = "/stuffInterestDelete")
+    @PostMapping( value = "/stuffInterestDelete")
     public JsonResult<String> stuffInterestDelete(HttpServletRequest request, @RequestParam("userName") String userName){
         JsonResult result = new JsonResult();
         if(userName.equals(null) || "".equals(userName.trim())){
@@ -77,21 +77,21 @@ public class StuffController {
 
     @IgnoreAuth
     @ApiOperation(value = "删除所有人员信息")
-    @RequestMapping(method = RequestMethod.GET, value = "/stuffReset")
+    @GetMapping(value = "/stuffReset")
     public JsonResult<String> deleteAllStuff(HttpServletRequest request){
         return stuffService.deleteAllStuff();
     }
 
     @IgnoreAuth
     @ApiOperation(value = "过期所有人员信息")
-    @RequestMapping(method = RequestMethod.GET, value = "/archiveAllStuff")
+    @GetMapping(value = "/archiveAllStuff")
     public JsonResult<String> archiveAllStuff(HttpServletRequest request){
         return stuffService.archiveAllStuff();
     }
 
     @IgnoreAuth
     @ApiOperation(value = "更新一条人员信息")
-    @RequestMapping(method = RequestMethod.POST, value = "/stuffInterestUpdate")
+    @PostMapping( value = "/stuffInterestUpdate")
     public JsonResult<String> stuffInterestUpdate(HttpServletRequest request, @RequestBody StuffEntity stuffEntity){
         JsonResult result = new JsonResult();
         if(stuffEntity.equals(null)){
@@ -106,7 +106,7 @@ public class StuffController {
 
     @IgnoreAuth
     @ApiOperation(value = "查询一条人员信息")
-    @RequestMapping(method = RequestMethod.GET, value = "/stuffInterestQuery")
+    @GetMapping(value = "/stuffInterestQuery")
     public JsonResult<List<StuffEntity>> stuffInterestQuery(HttpServletRequest request, @RequestParam("userName") String userName){
         JsonResult result = new JsonResult();
         if(userName.equals(null) || "".equals(userName.trim())){
@@ -121,27 +121,27 @@ public class StuffController {
 
     @IgnoreAuth
     @ApiOperation(value = "查询人员信息列表")
-    @RequestMapping(method = RequestMethod.GET, value = "/stuffInterestList")
+    @GetMapping(value = "/stuffInterestList")
     public JsonResult<List<StuffEntity>>  stuffInterestList(HttpServletRequest request){
         return stuffService.select();
     }
 
     @IgnoreAuth
     @ApiOperation(value = "SSO全量同步人员信息列表")
-    @RequestMapping(method = RequestMethod.GET, value = "/ssoStuffPushAll")
+    @GetMapping(value = "/ssoStuffPushAll")
     public JsonResult<String>  ssoStuffPushAll(HttpServletRequest request){
         return stuffService.ssoStuffPushAll();
     }
     @IgnoreAuth
     @ApiOperation(value = "SSO清空人员")
-    @RequestMapping(method = RequestMethod.GET, value = "/ssoStuffReset")
+    @GetMapping(value = "/ssoStuffReset")
     public JsonResult<String>  ssoStuffReset(HttpServletRequest request){
         return stuffService.ssoStuffReset();
     }
 
     @IgnoreAuth
     @ApiOperation(value = "SSO全量同步人员信息列表")
-    @RequestMapping(method = RequestMethod.GET, value = "/ssoStuffPushPartial")
+    @GetMapping(value = "/ssoStuffPushPartial")
     public JsonResult<String>  ssoStuffPushPartial(HttpServletRequest request){
         return stuffService.ssoStuffPushPartial();
     }
