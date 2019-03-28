@@ -1,7 +1,7 @@
 package com.poly.midware.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.poly.midware.entity.AppInfoEntity;
+import com.poly.midware.entity.auth.AppInfoEntity;
 import com.poly.midware.impl.SyncImpl;
 import com.poly.midware.mapper.AuthAppMapper;
 import com.poly.midware.utils.HttpUtils;

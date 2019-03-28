@@ -24,20 +24,20 @@ public class ConnectionTestController {
     @Resource
     private ConnectionTestService connectionTestService;
 
-    @IgnoreAuth
-    @ApiOperation(value = "测试连接数据")
-    @GetMapping(value = "/testConn")
-    public JsonResult<String> testConn(HttpServletRequest request) {
 
-        return  connectionTestService.testConn();
+    @IgnoreAuth
+    @ApiOperation(value = "获取人员上次同步时间戳")
+    @GetMapping(value = "/influnencedStfDate")
+    public JsonResult<String> influnencedStfDate(HttpServletRequest request) {
+
+        return  connectionTestService.influnencedStfDate();
     }
 
     @IgnoreAuth
-    @ApiOperation(value = "获取上次同步时间戳")
-    @GetMapping(value = "/influnencedDate")
-    public JsonResult<String> influnencedDate(HttpServletRequest request) {
-
-        return  connectionTestService.influnencedDate();
+    @ApiOperation(value = "获取组织结构上次同步时间戳")
+    @GetMapping(value = "/influnencedOrgDate")
+    public JsonResult<String> influnencedOrgDate(HttpServletRequest request) {
+        return  connectionTestService.influnencedOrgDate();
     }
 
 

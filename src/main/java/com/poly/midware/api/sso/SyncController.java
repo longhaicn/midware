@@ -1,6 +1,7 @@
 package com.poly.midware.api.sso;
 
 import com.poly.midware.service.SyncService;
+import com.poly.midware.utils.DateTimeUtils;
 import com.poly.midware.utils.annotation.IgnoreAuth;
 import com.poly.midware.utils.response.JsonResult;
 import io.swagger.annotations.Api;
@@ -34,12 +35,19 @@ public class SyncController {
         return  syncService.syncEvent();
     }
 
-    @Scheduled(cron = "0 1 * * * ?")
+    @IgnoreAuth
+    @ApiOperation(value = "增量同步OA接口（唯一）")
+    @PostMapping(value = "/syncEventOA")
+    public JsonResult<String> syncEventOA(HttpServletRequest request){
+
+        return  syncService.syncEventOA();
+    }
+    @Scheduled(cron = "40 * * * * ?")
     public void taskDate(){
-        System.out.println("###############################每小时差异同步组织架构###############################");
+        System.out.println("###############################"+ DateTimeUtils.getDateStr() +" 差异同步组织架构###############################");
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, -1);
-        syncEvent(null);
+        syncEventOA(null);
     }
 
 }

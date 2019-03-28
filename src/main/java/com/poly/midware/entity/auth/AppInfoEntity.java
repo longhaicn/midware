@@ -1,4 +1,4 @@
-package com.poly.midware.entity;
+package com.poly.midware.entity.auth;
 
 import lombok.Data;
 

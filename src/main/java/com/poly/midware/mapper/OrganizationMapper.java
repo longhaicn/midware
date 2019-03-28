@@ -47,16 +47,16 @@ public interface OrganizationMapper {
             "ts = #{ts} " +
             "WHERE organizationKey = #{organizationKey};")
     int updateByOuKey(
-                      @Param("organizationSetid") String organizationSetid,
-                      @Param("organizationUuid") String organizationUuid,
-                      @Param("organizationKey") String organizationKey,
-                      @Param("organization") String organization,
-                      @Param("parentUuid") String parentUuid,
-                      @Param("parentKey") String parentKey,
-                      @Param("childrenOuUuid") String childrenOuUuid,
-                      @Param("childrenKey") String childrenKey,
-                      @Param("linkingCode") String linkingCode,
-                      @Param("ts") Date ts);
+            @Param("organizationSetid") String organizationSetid,
+            @Param("organizationUuid") String organizationUuid,
+            @Param("organizationKey") String organizationKey,
+            @Param("organization") String organization,
+            @Param("parentUuid") String parentUuid,
+            @Param("parentKey") String parentKey,
+            @Param("childrenOuUuid") String childrenOuUuid,
+            @Param("childrenKey") String childrenKey,
+            @Param("linkingCode") String linkingCode,
+            @Param("ts") Date ts);
 
     @Update("UPDATE organization SET archived='1' WHERE id > 0 AND organizationUuid = #{organizationUuid};")
     int deleteByOrganizationUuid(String organizationUuid);
@@ -75,7 +75,7 @@ public interface OrganizationMapper {
     @Results({
             @Result(column="number", property="number"),
     })
-    CountNumberModel checkOuKey(@Param("organizationUuid")String organizationKey);
+    CountNumberModel checkOuKey(@Param("organizationUuid") String organizationKey);
     @Select("SELECT * FROM organization_view WHERE archived < '14' ORDER BY id DESC;")
     List<OrganizationEntity> ssoOrganizationPushPartial();
 
@@ -89,7 +89,7 @@ public interface OrganizationMapper {
     void archiveRelease();
 
     @Update("UPDATE organization_view SET archived=#{archived} WHERE id > 0 AND organizationKey=#{organizationKey};")
-    void success( @Param("organizationKey")String organizationKey,  @Param("archived")int archived);
+    void success(@Param("organizationKey") String organizationKey, @Param("archived") int archived);
 
     @Update("UPDATE organization SET archived='1' WHERE id>0 AND organizationKey = #{organizationKey};")
     void deleteByOuKey(String organizationKey);

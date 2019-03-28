@@ -22,37 +22,44 @@ import javax.annotation.Resource;
 public class ConnectionTestService {
     @Resource
     private ConnectionTestMapper connectionTestMapper;
-    public JsonResult<String> testConn() {
+//    public JsonResult<String> testConn() {
+//        JsonResult<String> result = new JsonResult<>();
+//        try {
+//                result.setRow(connectionTestMapper.testConn());
+//                result.setData(Message.SUCCES);
+//        } catch (Exception e) {
+//            result.setCode(0);
+//            result.setExpMsg(ExceptionCode.EXCEPTION_MSG_5000+e.getMessage());
+//            result.setExpCode(ExceptionCode.EXCEPTION_CODE_5000);
+//        }
+//        return result;
+//    }
+
+    public JsonResult<String> influnencedStfDate() {
         JsonResult<String> result = new JsonResult<>();
-
         try {
-                result.setRow(connectionTestMapper.testConn());
-                result.setData(Message.SUCCES);
-
-        } catch (Exception e) {
-            result.setCode(0);
-            result.setExpMsg(ExceptionCode.EXCEPTION_MSG_5000+e.getMessage());
-            result.setExpCode(ExceptionCode.EXCEPTION_CODE_5000);
-        }
-        return result;
-
-    }
-
-    public JsonResult<String> influnencedDate() {
-        JsonResult<String> result = new JsonResult<>();
-
-        try {
-            InfluenceDateModel ifd =  connectionTestMapper.influnencedDate();
+            InfluenceDateModel ifd =  connectionTestMapper.influnencedStfDate();
             result.setRow(1);
             result.setData(DateTimeUtils.formatDateStr(ifd.getInfluenced()));
-
         } catch (Exception e) {
             result.setCode(0);
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_5000+e.getMessage());
             result.setExpCode(ExceptionCode.EXCEPTION_CODE_5000);
         }
         return result;
+    }
 
-
+    public JsonResult<String> influnencedOrgDate() {
+        JsonResult<String> result = new JsonResult<>();
+        try {
+            InfluenceDateModel ifd =  connectionTestMapper.influnencedOrgDate();
+            result.setRow(1);
+            result.setData(DateTimeUtils.formatDateStr(ifd.getInfluenced()));
+        } catch (Exception e) {
+            result.setCode(0);
+            result.setExpMsg(ExceptionCode.EXCEPTION_MSG_5000+e.getMessage());
+            result.setExpCode(ExceptionCode.EXCEPTION_CODE_5000);
+        }
+        return result;
     }
 }

@@ -106,5 +106,65 @@ public class SyncService {
 
         return result;
     }
+    public JsonResult<String> syncEventOA() {
+
+        JsonResult result = new JsonResult();
+        SystemOrganizationSCIM ssoOrganization;
+        SystemAccountAPIDto ssoStuff;
+        JSONObject object;
+        try {
+            //获取组织架构的新增和更新信息
+            List<OrganizationEntity> pOrganizationList = syncMapper.pOrganizationList();
+            //获取人员的新增，更新，删除信息
+            List<StuffEntity> stuffList = syncMapper.stuffList();
+            //获取组织机构的删除信息
+            List<OrganizationEntity> vOrganizationList = syncMapper.vOrganizationList();
+            //新增 更新 组织架构
+            for (OrganizationEntity entity : pOrganizationList) {
+                ssoOrganization = OrganizationImpl.ssoOrganizationParsing(entity);
+                object = SyncImpl.toJSONObject(ssoOrganization);
+                if (1 == entity.getArchived()) {//新增
+                    System.out.println("新增组织架构："+entity.toString());
+                    HttpUtils.doPostOA(SsoApi.OABaseUrl + SsoApi.OAORGANIZATION, object, "utf-8");
+                    syncMapper.successOrg(entity.getOrganizationKey(), 11);
+                } else if (2 == entity.getArchived()) {
+                    System.out.println("修改组织架构："+entity.toString());
+                   HttpUtils.doPutOA(SsoApi.OABaseUrl + SsoApi.OAORGANIZATION , object, "utf-8");
+                    syncMapper.successOrg(entity.getOrganizationKey(), 12);
+                }
+            }
+            //新增 更新 删除人员
+            for (StuffEntity entity : stuffList) {
+                ssoStuff = StuffImpl.ssoStuffParsing(entity);
+                object = SyncImpl.toJSONObject(ssoStuff);
+                if (1 == entity.getArchived()) {
+                    System.out.println("新增人员："+entity.toString());
+                    HttpUtils.doPostOA(SsoApi.OABaseUrl + SsoApi.OAACCOUNT , object, "utf-8");
+                    syncMapper.successStf(entity.getUserName(), 11);
+                } else if (2 == entity.getArchived()) {
+                    System.out.println("修改人员："+entity.toString());
+                    HttpUtils.doPutOA(SsoApi.OABaseUrl + SsoApi.OAACCOUNT  , object, "utf-8");
+                    syncMapper.successStf(entity.getUserName(), 12);
+                } else if (3 == entity.getArchived()) {
+                    System.out.println("删除人员："+entity.toString());
+                    HttpUtils.doDeleteOA(SsoApi.OABaseUrl + SsoApi.OAACCOUNT  + "&id=" + ssoStuff.getId(), "utf-8");
+                    syncMapper.successStf(entity.getUserName(), 13);
+                }
+            }
+            //删除组织架构
+            for (OrganizationEntity entity : vOrganizationList) {
+                if (3 == entity.getArchived()) {
+                    System.out.println("删除组织架构："+entity.toString());
+                    String url = SsoApi.OABaseUrl + SsoApi.ORGANIZATION  + "&id=" + entity.getOrganizationKey();
+                    HttpUtils.doDeleteOA(url, "utf-8");
+                    syncMapper.successOrg(entity.getOrganizationKey(), 13);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 
 }

@@ -36,7 +36,7 @@ public class DateTimeUtils {
 
     public static String formatDateStr(Date date) {
 
-        SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
         return time.format(date);
 

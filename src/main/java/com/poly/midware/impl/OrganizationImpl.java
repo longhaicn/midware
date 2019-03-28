@@ -23,7 +23,7 @@ import java.util.Map;
 public class OrganizationImpl {
     public static List<OrganizationEntity> parseJsonAllOrganization(String data) {
         List<OrganizationEntity> list = new ArrayList<>();
-        OrganizationEntity entity ;
+        OrganizationEntity entity;
         JSONObject json = JSON.parseObject(data);
         JSONArray ja = (JSONArray) json.get("list");
         for (int i = 0; i < ja.size(); i++) {
@@ -104,6 +104,7 @@ public class OrganizationImpl {
             entity.setTs(jsonObject.getDate("ts"));
             entity.setLinkingCode(jsonObject.getString("linkingCode"));
             entity.setArchived(jsonObject.getInteger("archived"));
+            System.out.println(entity.toString());
             list.add(entity);
         }
         for (int i = 0; i < jaK.size(); i++) {

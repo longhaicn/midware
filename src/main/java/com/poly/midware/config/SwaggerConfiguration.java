@@ -1,4 +1,4 @@
-//package com.poly.midware.config;
+package com.poly.midware.config;//package com.poly.midware.config;
 //
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;

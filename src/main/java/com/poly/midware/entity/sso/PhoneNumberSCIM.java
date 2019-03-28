@@ -11,11 +11,14 @@
  */
 package com.poly.midware.entity.sso;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * Created by ZhiBo Feng.
  */
+@Data
 public class PhoneNumberSCIM implements Serializable{
     private static final long serialVersionUID = -5681553341913026275L;
 
@@ -25,19 +28,5 @@ public class PhoneNumberSCIM implements Serializable{
 
     public PhoneNumberSCIM(){}
 
-    public String getValue() {
-        return value;
-    }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 }

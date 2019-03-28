@@ -30,8 +30,8 @@ public interface SyncMapper {
     List<OrganizationEntity> vOrganizationList();
 
     @Update("UPDATE stuff_view SET archived=#{archived} WHERE id > 0 AND userName=#{userName};")
-    void successStf(@Param("userName")String userName, @Param("archived")int archived);
+    void successStf(@Param("userName") String userName, @Param("archived") int archived);
 
     @Update("UPDATE organization_view SET archived=#{archived} WHERE id > 0 AND organizationKey=#{organizationKey};")
-    void successOrg(@Param("organizationKey")String organizationKey, @Param("archived")int archived);
+    void successOrg(@Param("organizationKey") String organizationKey, @Param("archived") int archived);
 }

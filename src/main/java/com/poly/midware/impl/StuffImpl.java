@@ -37,11 +37,9 @@ public class StuffImpl {
             entity.setLeader(jsonObject.getString("leader"));
             entity.setIdCard(jsonObject.getString("idCard"));
             entity.setStatus(jsonObject.getString("status"));
-            entity.setJobId(jsonObject.getString("jobId"));
             entity.setJobKey(jsonObject.getString("jobKey"));
             entity.setJobName(jsonObject.getString("jobName"));
             entity.setJobGrade(jsonObject.getString("jobGrade"));
-            entity.setOrganizationUuid(jsonObject.getString("organizationUuid"));
             entity.setOrganizationKey(jsonObject.getString("organizationKey"));
             entity.setOrganizationName(jsonObject.getString("organizationName"));
             entity.setCreateTime(jsonObject.getDate("createTime"));
@@ -64,11 +62,9 @@ public class StuffImpl {
             entity.setGender(jsonObject.getString("gender"));
             entity.setIdCard(jsonObject.getString("idCard"));
             entity.setStatus(jsonObject.getString("status"));
-            entity.setJobId(jsonObject.getString("jobId"));
             entity.setJobKey(jsonObject.getString("jobKey"));
             entity.setJobName(jsonObject.getString("jobName"));
             entity.setJobGrade(jsonObject.getString("jobGrade"));
-            entity.setOrganizationUuid(jsonObject.getString("organizationUuid"));
             entity.setOrganizationKey(jsonObject.getString("organizationKey"));
             entity.setOrganizationName(jsonObject.getString("organizationName"));
             entity.setDisplayName(jsonObject.getString("displayName"));
@@ -85,58 +81,6 @@ public class StuffImpl {
         }
         return list;
     }
-//
-//    public static List<SystemAccountAPIDto> ssoStuffListParsing(List<StuffEntity> list) {
-//        List<SystemAccountAPIDto> lists = new ArrayList<>();
-//        SystemAccountAPIDto systemAccountAPIDto = new SystemAccountAPIDto();
-//        Belongs belongs = new Belongs();
-//        EmailSCIM emailSCIM = new EmailSCIM();
-//        List<Belongs> listBelongs = new ArrayList<>();
-//        List<EmailSCIM> listEmailSCIM = new ArrayList<>();
-//        SCIMExtendField listSCIMExtendField = new SCIMExtendField();
-//        PhoneNumberSCIM phoneNumberSCIM = new PhoneNumberSCIM();
-//        List<PhoneNumberSCIM> listPhoneNumberSCIM = new ArrayList<>();
-//
-//        for (StuffEntity entity:list ) {
-//            System.out.println(entity.toString());
-//            systemAccountAPIDto.setDisplayName(entity.getDisplayName());
-//            belongs.setBelongOuUuid(entity.getOrganizationUuid());
-//            listBelongs.add(belongs);
-//            systemAccountAPIDto.setBelongs(listBelongs);
-//            emailSCIM.setValue(entity.getEmails());
-//            listEmailSCIM.add(emailSCIM);
-//            systemAccountAPIDto.setEmails(listEmailSCIM);
-//            Map<String,Object> map = new HashMap<>();
-//            map.put("role",entity.getRole());
-//            map.put("status",entity.getStatus());
-//            map.put("leader",entity.getLeader());
-//            map.put("jobId",entity.getJobId());
-//            map.put("jobGrade",entity.getJobGrade());
-//            map.put("jobName",entity.getJobName());
-//            map.put("pinyinName",entity.getPinyinName());
-//            map.put("idCard",entity.getIdCard());
-//            listSCIMExtendField.setAttributes(map);
-//            systemAccountAPIDto.setExtendField(listSCIMExtendField);
-//            systemAccountAPIDto.setExternalId(entity.getUserName());
-//            systemAccountAPIDto.setId(entity.getUserName());
-//            systemAccountAPIDto.setUserName(entity.getUserName());
-//            phoneNumberSCIM.setValue(entity.getPhoneNumber());
-//            listPhoneNumberSCIM.add(phoneNumberSCIM);
-//            systemAccountAPIDto.setPhoneNumbers(listPhoneNumberSCIM);
-//
-//
-//            lists.add(systemAccountAPIDto);
-//
-//
-//            listBelongs.clear();
-//            listEmailSCIM.clear();
-//            phoneNumberSCIM=new PhoneNumberSCIM();
-//            listPhoneNumberSCIM.clear();
-//
-//        }
-//        return lists;
-//
-//    }
 
     public static SystemAccountAPIDto ssoStuffParsing(StuffEntity entity) {
         SystemAccountAPIDto systemAccountAPIDto = new SystemAccountAPIDto();
@@ -159,7 +103,6 @@ public class StuffImpl {
         map.put("gender",entity.getGender());
         map.put("status",entity.getStatus());
         map.put("leader",entity.getLeader());
-        map.put("jobId",entity.getJobId());
         map.put("jobKey",entity.getJobKey());
         map.put("jobGrade",entity.getJobGrade());
         map.put("jobName",entity.getJobName());

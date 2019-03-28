@@ -43,9 +43,9 @@ public class StuffEntity implements java.io.Serializable {
      */
     private String idCard;
     /**
-     * 岗位ID E01A1
+     * 是否转正 A32 C3210字段
      */
-    private String jobId;
+    private String status;
     /**
      * 岗位Key unique_id
      */
@@ -58,14 +58,6 @@ public class StuffEntity implements java.io.Serializable {
      * 职位级别 H01SX
      */
     private String jobGrade;
-    /**
-     * 是否转正 A32 C3210字段
-     */
-    private String status;
-    /**
-     * 所属组织机构的uuid
-     */
-    private String organizationUuid;
     /**
      * 所属组织机构的uuid
      */
@@ -81,7 +73,6 @@ public class StuffEntity implements java.io.Serializable {
     /**
      * 创建时间
      */
-
     private Date createTime;
     /**
      * 最后操作时间

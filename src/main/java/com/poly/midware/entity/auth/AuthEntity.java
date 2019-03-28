@@ -1,7 +1,6 @@
 package com.poly.midware.entity.auth;
 
 import lombok.Data;
-
 import java.util.List;
 
 @Data

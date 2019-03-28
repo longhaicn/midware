@@ -56,7 +56,7 @@ public class StuffController {
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_1000);
             result.setExpCode(ExceptionCode.EXCEPTION_CODE_1000);
         }else {
-            result =  stuffService.stuffInfluenced(data);
+            result =  stuffService.stuffInfluencedSave(data);
         }
         return result;
     }

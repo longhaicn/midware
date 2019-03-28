@@ -19,4 +19,12 @@ public class SsoApi {
     public static final String AUTHENTICATION="/api/application/user/auth_";
     /**Token拼接*/
     public static final String TOKEN = "?access_token=";
+
+
+    /**OA系统地址*/
+    public static final String OABaseUrl = "https://oa.shenzhenpoly.com";
+    /**OA系统地址*/
+    public static final String OAACCOUNT = "/ehr/IdsmanagerSyncHrm.jsp";
+    /**OA系统地址*/
+    public static final String OAORGANIZATION= "/ehr/IdsmanagerSync.jsp";
 }

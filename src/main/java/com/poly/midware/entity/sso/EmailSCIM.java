@@ -11,11 +11,14 @@
  */
 package com.poly.midware.entity.sso;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * Created by ZhiBo Feng.
  */
+@Data
 public class EmailSCIM implements Serializable{
     private static final long serialVersionUID = -7406707216090876374L;
 
@@ -30,27 +33,5 @@ public class EmailSCIM implements Serializable{
 
     }
 
-    public String getValue() {
-        return value;
-    }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getPrimary() {
-        return primary;
-    }
-
-    public void setPrimary(String primary) {
-        this.primary = primary;
-    }
 }

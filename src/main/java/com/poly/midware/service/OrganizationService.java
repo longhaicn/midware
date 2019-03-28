@@ -178,6 +178,7 @@ public class OrganizationService {
         try {
             List<OrganizationEntity> list =OrganizationImpl.parseJsonInfluenceOrganization(data);
             for (OrganizationEntity o : list) {
+                System.out.println("organizationInfluencedSave:"+o.toString());
                 switch (o.getArchived()){
                     case 1:
                         //1.1判断为新增数据，插入变动表
@@ -206,6 +207,7 @@ public class OrganizationService {
                        }
                        break;
                     case 3:
+                        System.out.println(o.toString());
                         organizationMapper.insertView(o);
                         organizationMapper.deleteByOuKey(o.getOrganizationKey());
                         break;
@@ -215,6 +217,7 @@ public class OrganizationService {
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             result.setCode(0);
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_4000);
             result.setExpCode(ExceptionCode.EXCEPTION_CODE_4000);

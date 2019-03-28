@@ -34,7 +34,6 @@ public class SystemAccountAPIDto implements Serializable{
      * 外部ID，唯一
      */
     private String externalId;
-
     /**
      * 邮箱
      */

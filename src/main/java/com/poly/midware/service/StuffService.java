@@ -141,12 +141,13 @@ public class StuffService {
         return result;
     }
 
-    public JsonResult stuffInfluenced(String data) {
+    public JsonResult stuffInfluencedSave(String data) {
 
         JsonResult result = new JsonResult();
         try {
             List<StuffEntity> list =StuffImpl.parseJsonInfluenceStuff(data);
             for (StuffEntity o : list) {
+                System.out.println("###stuffInfluencedSave### "+o.toString());
                 switch (o.getArchived()){
                     case 1:
                         //1.1判断为新增数据，插入变动表
@@ -156,6 +157,7 @@ public class StuffService {
                         break;
                     case 2:
                         //2.1判断数据是否存在，存在则修改，不存在则新增
+                        System.out.println(200);
                         if(1 == stuffMapper.checkUser(o.getUserName()).getNumber()) {
                             //插入变动表
                             stuffMapper.insertView(o);
@@ -181,7 +183,6 @@ public class StuffService {
                         break;
                 }
             }
-
         } catch (Exception e) {
             result.setCode(0);
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_4000);
@@ -208,8 +209,6 @@ public class StuffService {
                 String res = HttpUtils.doPost(SsoApi.SSOBaseUrl+SsoApi.ACCOUNT+SsoApi.TOKEN+token,object,"utf-8");
                 System.out.println(res);
                 result.setData(res);
-
-
             }
             result.setRow(list.size());
         } catch (Exception e) {

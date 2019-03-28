@@ -16,5 +16,4 @@ public class SCIMExtendField implements Serializable {
 
     private Map<String,Object> attributes = new HashMap<>();
 
-
 }

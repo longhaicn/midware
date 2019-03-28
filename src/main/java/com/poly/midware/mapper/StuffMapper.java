@@ -42,13 +42,13 @@ public interface StuffMapper {
     @Update("UPDATE stuff SET archived='4' WHERE id > 0;")
     int archiveAllStuff();
 
-    @Select("SELECT count(uniqueId) as number FROM stuff where userName = #{userName};")
+    @Select("SELECT count(userName) as number FROM stuff where userName = #{userName};")
     CountNumberModel checkUser(String userName);
 
     @Update("UPDATE stuff SET archived='1' WHERE id > 0 AND userName = #{userName};")
-    void archiveStuff(String uniqueId);
+    void archiveStuff(String userName);
 
-    @Update("UPDATE stuff (#{stuff}) WHERE uniqueId = #{userName}")
+    @Update("UPDATE stuff (#{stuff}) WHERE userName = #{userName}")
     @Lang(SimpleUpdateLangDriver.class)
     void updateStuff(StuffEntity stuff);
 
@@ -64,7 +64,7 @@ public interface StuffMapper {
     List<StuffEntity> ssoStuffPushPartial();
 
     @Update("UPDATE stuff_view SET archived=#{archived} WHERE id > 0 AND userName=#{userName};")
-    void success( @Param("userName")String userName,  @Param("archived")int archived);
+    void success(@Param("userName") String userName, @Param("archived") int archived);
 
     @Insert("INSERT INTO stuff_view(#{stuffEntity})")
     @Lang(SimpleInsertLangDriver.class)

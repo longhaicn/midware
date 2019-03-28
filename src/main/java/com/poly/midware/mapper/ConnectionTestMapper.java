@@ -15,10 +15,9 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface ConnectionTestMapper {
 
-    @Select("SELECT COUNT(*) FROM stuff;")
-    int testConn();
+    @Select("SELECT max(ts) as influenced FROM stuff_view;")
+    InfluenceDateModel influnencedStfDate();
 
-
-    @Select("SELECT max(ts) as influenced FROM stuff;")
-    InfluenceDateModel influnencedDate();
+    @Select("SELECT max(ts) as influenced FROM organization_view;")
+    InfluenceDateModel influnencedOrgDate();
 }

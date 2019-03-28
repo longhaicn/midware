@@ -1,0 +1,25 @@
+#配置信息
+#服务端口
+server:
+  port: 8081
+
+#mysql 连接
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.1.47:3306/midware?useUnicode=true&characterEncoding=gbk&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: longhai1234
+    driver-class-name: com.mysql.jdbc.Driver
+
+#swagger 配置
+swagger:
+  enabled: true
+  title:  保臻科技主数据平台APIS
+  description: Spring boot 使用Swagger2构建RESTful APIS
+  version: 1.0
+  basePackage: com.poly.midware.api
+  basePath: /**
+  excludePath: /error
+  contact:
+    name: 龙海
+    email: longhai@shenzhenpoly.com

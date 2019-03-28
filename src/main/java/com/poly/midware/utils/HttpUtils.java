@@ -1,6 +1,9 @@
 package com.poly.midware.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.http.HttpConnection;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -29,6 +32,9 @@ import javax.security.cert.X509Certificate;
  * @author lcs
  */
 public class HttpUtils {
+
+    public static final String encoding = new String(Base64.encodeBase64(StringUtils.getBytesUtf8("idsmanager:poly20170401")));
+
     public static HttpClient wrapClient(HttpClient base) {
         try {
             SSLContext ctx = SSLContext.getInstance("TLS");
@@ -83,9 +89,7 @@ public class HttpUtils {
             StringEntity entity = new StringEntity(jsonObject.toString(), charset);
             entity.setContentEncoding("UTF-8");
             entity.setContentType("application/json");
-
             httpPost.setEntity(entity);
-
             HttpResponse response = httpClient.execute(httpPost);
             if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 HttpEntity resEntity = response.getEntity();
@@ -192,6 +196,90 @@ public class HttpUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String doPostOA(String url, JSONObject jsonObject, String charset) {
+        HttpClient httpClient = null;
+        HttpPost httpPost = null;
+        String result = null;
+        try {
+            if(url.startsWith("https")){
+                httpClient = wrapClient(new DefaultHttpClient());
+            }else{
+                httpClient = new DefaultHttpClient();
+            }
+            httpPost = new HttpPost(url);
+            httpPost.addHeader("Authorization", "Basic " + encoding);
+            System.out.println(jsonObject.toString());
+            StringEntity entity = new StringEntity(jsonObject.toString(), charset);
+            entity.setContentEncoding("UTF-8");
+            entity.setContentType("application/json");
+            httpPost.setEntity(entity);
+            HttpResponse response = httpClient.execute(httpPost);
+
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                HttpEntity resEntity = response.getEntity();
+                if (resEntity != null) {
+                    result = EntityUtils.toString(resEntity, charset);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String doPutOA(String url, JSONObject jsonObject, String charset) {
+        HttpClient httpClient = null;
+        HttpPut httpPut = null;
+        String result = null;
+        try {
+            if(url.startsWith("https")){
+                httpClient = wrapClient(new DefaultHttpClient());
+            }else{
+                httpClient = new DefaultHttpClient();
+            }
+            httpPut = new HttpPut(url);
+            httpPut.addHeader("Authorization", "Basic " + encoding);
+            StringEntity entity = new StringEntity(jsonObject.toString(), charset);
+            entity.setContentEncoding("UTF-8");
+            entity.setContentType("application/json");
+            httpPut.setEntity(entity);
+            HttpResponse response = httpClient.execute(httpPut);
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                HttpEntity resEntity = response.getEntity();
+                if (resEntity != null) {
+                    result = EntityUtils.toString(resEntity, charset);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+    public static String doDeleteOA(String url, String charset) {
+        HttpClient httpClient = null;
+        HttpDelete httpDelete = null;
+        String result = null;
+        try {
+            if(url.startsWith("https")){
+                httpClient = wrapClient(new DefaultHttpClient());
+            }else{
+                httpClient = new DefaultHttpClient();
+            }
+            httpDelete = new HttpDelete(url);
+            httpDelete.addHeader("Authorization", "Basic " + encoding);
+            HttpResponse response = httpClient.execute(httpDelete);
+            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                HttpEntity resEntity = response.getEntity();
+                if (resEntity != null) {
+                    result = EntityUtils.toString(resEntity, charset);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return result;
     }

@@ -52,7 +52,6 @@ public class OrganizationController {
     @ApiOperation(value = "增量同步组织架构信息")
     @PostMapping( value = "/organizationInfluencedSave")
     public JsonResult<String> organizationInfluencedSave(HttpServletRequest request, @RequestBody String data) {
-
         JsonResult result = new JsonResult();
         if(data.isEmpty()||data.length()<10){
             result.setCode(0);
