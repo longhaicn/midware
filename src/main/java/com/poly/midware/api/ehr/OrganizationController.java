@@ -35,11 +35,11 @@ public class OrganizationController {
     public JsonResult<String> organizationInterestSave(HttpServletRequest request, @RequestBody String data) {
         JsonResult result = new JsonResult();
         List<OrganizationEntity> list = OrganizationImpl.parseJsonAllOrganization(data);
-        if(list.equals(null)||list.size()<1){
+        if(list.equals(null)||list.size()<1) {
             result.setCode(0);
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_1000);
             result.setExpCode(ExceptionCode.EXCEPTION_CODE_1000);
-        }else{
+        }else {
             for (OrganizationEntity organizationEntity: list ) {
                 System.out.println(organizationEntity);
                 result = organizationService.insert(organizationEntity);
@@ -53,7 +53,7 @@ public class OrganizationController {
     @PostMapping( value = "/organizationInfluencedSave")
     public JsonResult<String> organizationInfluencedSave(HttpServletRequest request, @RequestBody String data) {
         JsonResult result = new JsonResult();
-        if(data.isEmpty()||data.length()<10){
+        if(data.isEmpty()||data.length()<10) {
             result.setCode(0);
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_1000);
             result.setExpCode(ExceptionCode.EXCEPTION_CODE_1000);
@@ -66,14 +66,14 @@ public class OrganizationController {
     @IgnoreAuth
     @ApiOperation(value = "删除一条组织架构信息")
     @PostMapping(value = "/organizationInterestDelete")
-    public JsonResult<String> organizationInterestDelete(HttpServletRequest request, @RequestParam("organizationUuid") String organizationUuid){
+    public JsonResult<String> organizationInterestDelete(HttpServletRequest request, @RequestParam("organizationKey") String organizationKey){
         JsonResult result = new JsonResult();
-        if(organizationUuid.equals(null) || "".equals(organizationUuid.trim())){
+        if(organizationKey.equals(null) || "".equals(organizationKey.trim())){
             result.setCode(0);
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_1000);
             result.setExpCode(ExceptionCode.EXCEPTION_CODE_1000);
         }else{
-            result = organizationService.deleteByOrganizationUuid(organizationUuid);
+            result = organizationService.deleteByOrganizationKey(organizationKey);
         }
         return result;
     }
@@ -95,7 +95,7 @@ public class OrganizationController {
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_1000);
             result.setExpCode(ExceptionCode.EXCEPTION_CODE_1000);
         }else{
-            result = organizationService.updateByOrganizationUuid(organizationEntity);
+            result = organizationService.updateByOrganizationKey(organizationEntity);
         }
         return result;
     }
@@ -103,14 +103,14 @@ public class OrganizationController {
     @IgnoreAuth
     @ApiOperation(value = "查询一条组织架构信息")
     @GetMapping( value = "/organizationInterestQuery")
-    public JsonResult<List<OrganizationEntity>> organizationInterestQuery(HttpServletRequest request,  String organizationUuid){
+    public JsonResult<List<OrganizationEntity>> organizationInterestQuery(HttpServletRequest request,  String organizationKey){
         JsonResult result = new JsonResult();
-        if(organizationUuid.equals(null) || "".equals(organizationUuid.trim())){
+        if(organizationKey.equals(null) || "".equals(organizationKey.trim())){
             result.setCode(0);
             result.setExpMsg(ExceptionCode.EXCEPTION_MSG_1000);
             result.setExpCode(ExceptionCode.EXCEPTION_CODE_1000);
         }else{
-            result = organizationService.queryByOrganizationUuid(organizationUuid);
+            result = organizationService.queryByOrganizationKey(organizationKey);
         }
         return result;
     }

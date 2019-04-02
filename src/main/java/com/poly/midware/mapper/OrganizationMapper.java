@@ -28,11 +28,11 @@ public interface OrganizationMapper {
     @Select("SELECT * FROM organization WHERE organizationSetid<>'@K' AND archived='0'  order by organizationUuid asc;")
     List<OrganizationEntity> selectUMUN();
 
-    @Select("SELECT * FROM organization WHERE organizationUuid= #{organizationUuid}")
-    List<OrganizationEntity> queryByOrganizationUuid(String organizationUuid);
+    @Select("SELECT * FROM organization WHERE organizationKey= #{organizationKey}")
+    List<OrganizationEntity> queryByOrganizationKey(String organizationKey);
 
-    @Select("SELECT * FROM organization WHERE organizationUuid= #{organizationUuid}")
-    OrganizationEntity queryOrganizationByUuid(String organizationUuid);
+    @Select("SELECT * FROM organization WHERE organizationKey= #{organizationKey}")
+    OrganizationEntity queryOrganizationByKey(String organizationKey);
 
     @Update("UPDATE organization SET " +
             "organizationSetid = #{organizationSetid}," +
@@ -58,8 +58,8 @@ public interface OrganizationMapper {
             @Param("linkingCode") String linkingCode,
             @Param("ts") Date ts);
 
-    @Update("UPDATE organization SET archived='1' WHERE id > 0 AND organizationUuid = #{organizationUuid};")
-    int deleteByOrganizationUuid(String organizationUuid);
+    @Update("UPDATE organization SET archived='1' WHERE id > 0 AND organizationKey = #{organizationKey};")
+    int deleteByOrganizationKey(String organizationKey);
 
     @Delete("DELETE FROM organization WHERE id > 0 AND archived='4';")
     int deleteAllOrganization();
@@ -71,22 +71,14 @@ public interface OrganizationMapper {
     @Lang(SimpleInsertLangDriver.class)
     void insertView(OrganizationEntity o);
 
-    @Select("SELECT count(organizationUuid) as number FROM organization where organizationKey = #{organizationKey} AND archived='0';")
+    @Select("SELECT count(organizationKey) as number FROM organization where organizationKey = #{organizationKey} AND archived='0';")
     @Results({
             @Result(column="number", property="number"),
     })
-    CountNumberModel checkOuKey(@Param("organizationUuid") String organizationKey);
+    CountNumberModel checkOuKey(@Param("organizationKey") String organizationKey);
+
     @Select("SELECT * FROM organization_view WHERE archived < '14' ORDER BY id DESC;")
     List<OrganizationEntity> ssoOrganizationPushPartial();
-
-    @Update("UPDATE organization SET archived='10' WHERE organizationKey = #{organizationKey};")
-    void archiveOrganization(String organizationKey);
-
-    @Select("SELECT * FROM organization where archived='0';")
-    List<OrganizationEntity> queryByArchive();
-
-    @Update("UPDATE organization SET archived='0' WHERE id > 0 AND archived='10';")
-    void archiveRelease();
 
     @Update("UPDATE organization_view SET archived=#{archived} WHERE id > 0 AND organizationKey=#{organizationKey};")
     void success(@Param("organizationKey") String organizationKey, @Param("archived") int archived);

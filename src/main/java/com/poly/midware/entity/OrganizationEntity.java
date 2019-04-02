@@ -15,14 +15,15 @@ public class OrganizationEntity implements java.io.Serializable {
      * 机构类型：单位:UN  部门:UM   岗位:@K
      */
     private String organizationSetid;
-    /**
-     * 组织机构的ID
-     */
-    private String organizationUuid;
+
     /**
      * 组织机构的Key
      */
     private String organizationKey;
+    /**
+     * 组织机构的ID
+     */
+    private String organizationUuid;
     /**
      * 组织机构名称
      */

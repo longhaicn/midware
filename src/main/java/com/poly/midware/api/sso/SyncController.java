@@ -44,7 +44,11 @@ public class SyncController {
     }
     @Scheduled(cron = "40 * * * * ?")
     public void taskDate(){
-        System.out.println("###############################"+ DateTimeUtils.getDateStr() +" 差异同步组织架构###############################");
+        String datetime = DateTimeUtils.getDateStr();
+        String mm[] = datetime.split(":");
+        if("00".equals(mm[1])||"30".equals(mm[1])){
+            System.out.println("###############################"+ datetime +" 差异同步组织架构###############################");
+        }
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         syncEventOA(null);

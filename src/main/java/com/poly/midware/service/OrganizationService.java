@@ -80,10 +80,10 @@ public class OrganizationService {
     }
 
     //3.查询条件记录
-    public JsonResult<List<OrganizationEntity>> queryByOrganizationUuid(String organizationUuid) {
+    public JsonResult<List<OrganizationEntity>> queryByOrganizationKey(String organizationKey) {
         JsonResult result = new JsonResult();
         try {
-            List<OrganizationEntity> list = organizationMapper.queryByOrganizationUuid(organizationUuid);
+            List<OrganizationEntity> list = organizationMapper.queryByOrganizationKey(organizationKey);
             result.setData(list);
             result.setRow(list.size());
         } catch (Exception e) {
@@ -95,7 +95,7 @@ public class OrganizationService {
     }
 
     //4.更新一条记录
-    public JsonResult<String> updateByOrganizationUuid(OrganizationEntity o) {
+    public JsonResult<String> updateByOrganizationKey(OrganizationEntity o) {
 
         JsonResult result = new JsonResult();
         try {
@@ -122,10 +122,10 @@ public class OrganizationService {
     }
 
     //5.删除一条记录
-    public JsonResult<String> deleteByOrganizationUuid(String organizationUuid) {
+    public JsonResult<String> deleteByOrganizationKey(String organizationKey) {
         JsonResult result = new JsonResult();
         try {
-            int row = organizationMapper.deleteByOrganizationUuid(organizationUuid);
+            int row = organizationMapper.deleteByOrganizationKey(organizationKey);
             if (row > 0) {
                 result.setRow(row);
                 result.setData(Message.DELETED);
@@ -266,15 +266,15 @@ public class OrganizationService {
 
 
     private boolean hasParentOU(String s) {
-        OrganizationEntity organizationEntity = organizationMapper.queryOrganizationByUuid(s);
+        OrganizationEntity organizationEntity = organizationMapper.queryOrganizationByKey(s);
 
         if (null == organizationEntity ){
             System.out.println(s);
             return true;
-        }else if(organizationEntity.getOrganizationUuid().equals(organizationEntity.getParentUuid())) {
+        }else if(organizationEntity.getOrganizationKey().equals(organizationEntity.getParentKey())) {
             return false;
         }else{
-           return hasParentOU(organizationEntity.getParentUuid());
+           return hasParentOU(organizationEntity.getParentKey());
         }
     }
     public JsonResult<String> ssoOrganizationPushPartial(){
@@ -285,9 +285,9 @@ public class OrganizationService {
             List<OrganizationEntity> listUpdate = organizationMapper.ssoOrganizationPushPartial();
             for (OrganizationEntity entity: listUpdate ){
                 if(1 == entity.getArchived()){//新增
-                    s.setOrganizationUuid(entity.getOrganizationUuid());
+                    s.setOrganizationUuid(entity.getOrganizationKey());
                     s.setOrganization(entity.getOrganization());
-                    s.setParentUuid(entity.getParentUuid());
+                    s.setParentUuid(entity.getParentKey());
                     SCIMExtendField extendField = new SCIMExtendField();
                     Map<String , Object> map = new HashMap<>();
                     map.put("organizationSetid",entity.getOrganizationSetid());
@@ -300,12 +300,12 @@ public class OrganizationService {
                     System.out.println("insert"+res);
                     JSONObject obj =JSONObject.parseObject(res);
                     if(0 == obj.getInteger("errorNumber")){
-                        organizationMapper.success(entity.getOrganizationUuid(),11);
+                        organizationMapper.success(entity.getOrganizationKey(),11);
                     }
                 }else if(2 == entity.getArchived()){
-                    s.setOrganizationUuid(entity.getOrganizationUuid());
+                    s.setOrganizationUuid(entity.getOrganizationKey());
                     s.setOrganization(entity.getOrganization());
-                    s.setParentUuid(entity.getParentUuid());
+                    s.setParentUuid(entity.getParentKey());
                     SCIMExtendField extendField = new SCIMExtendField();
                     Map<String , Object> map = new HashMap<>();
                     map.put("organizationSetid",entity.getOrganizationSetid());
@@ -318,17 +318,17 @@ public class OrganizationService {
                     System.out.println("update"+res);
                     JSONObject obj =JSONObject.parseObject(res);
                     if(0 == obj.getInteger("errorNumber")){
-                        organizationMapper.success(entity.getOrganizationUuid(),12);
+                        organizationMapper.success(entity.getOrganizationKey(),12);
                     }
                 }else if(3 == entity.getArchived()){
                     System.out.println(entity.toString());
-                    String url =SsoApi.SSOBaseUrl+SsoApi.ORGANIZATION+SsoApi.TOKEN+token+"&id="+entity.getOrganizationUuid();
+                    String url =SsoApi.SSOBaseUrl+SsoApi.ORGANIZATION+SsoApi.TOKEN+token+"&id="+entity.getOrganizationKey();
                     String res =HttpUtils.doDelete(url,"utf-8");
                     System.out.println(url);
                     System.out.println("delete"+res);
                     JSONObject obj =JSONObject.parseObject(res);
                     if(0 == obj.getInteger("errorNumber")){
-                        organizationMapper.success(entity.getOrganizationUuid(),13);
+                        organizationMapper.success(entity.getOrganizationKey(),13);
                     }
                 }
             }

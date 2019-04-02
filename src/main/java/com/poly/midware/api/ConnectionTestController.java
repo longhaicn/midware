@@ -24,7 +24,6 @@ public class ConnectionTestController {
     @Resource
     private ConnectionTestService connectionTestService;
 
-
     @IgnoreAuth
     @ApiOperation(value = "获取人员上次同步时间戳")
     @GetMapping(value = "/influnencedStfDate")
